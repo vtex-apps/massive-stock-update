@@ -1,33 +1,76 @@
 {
-  "name": "service-example",
-  "vendor": "vtex",
-  "version": "0.2.0",
-  "title": "Service Example",
-  "description": "Reference app for VTEX IO Services",
-  "mustUpdateAt": "2018-01-04",
-  "categories": [],
-  "dependencies": {},
+  "vendor": "vtexarg",
+  "name": "massiveUpdate",
+  "version": "0.0.1",
+  "title": "Massive Update",
+  "description": "Massive Update component",
+  "defaultLocale": "es-AR",
   "builders": {
+    "messages": "1.x",
+    "store": "0.x",
+    "react": "3.x",
+    "graphql": "1.x",
     "node": "6.x",
+    "admin": "0.x",
     "docs": "0.x"
   },
-  "scripts": {
-    "prereleasy": "bash lint.sh"
+  "dependencies": {
+    "vtex.styleguide": "9.x",
+    "vtex.css-handles": "0.x",
+    "vtex.search-graphql": "0.x",
+    "vtex.product-context": "0.x",
+    "vtex.slider-layout": "0.x",
+    "vtex.catalog-graphql": "1.x"
   },
-  "credentialType": "absolute",
   "policies": [
+    {
+      "name": "vtex.catalog-graphql:resolve-graphql"
+    },
     {
       "name": "outbound-access",
       "attrs": {
-        "host": "httpstat.us",
-        "path": "*"
+        "host": "{{account}}.myvtex.com",
+        "path": "/*"
       }
     },
     {
-      "name": "colossus-fire-event"
+      "name": "outbound-access",
+      "attrs": {
+        "host": "portal.vtexcommercestable.com.br",
+        "path": "/api/*"
+      }
     },
     {
-      "name": "colossus-write-logs"
+      "name": "outbound-access",
+      "attrs": {
+        "host": "portal.vtexcommercebeta.com.br",
+        "path": "/api/*"
+      }
+    },
+    {
+      "name": "outbound-access",
+      "attrs": {
+        "host": "{{account}}.vtexcommercestable.com.br",
+        "path": "/api/*"
+      }
+    },
+    {
+      "name": "Get_Account_By_Identifier"
+    },
+    {
+      "name": "vbase-read-write"
+    },
+    {
+      "name": "AlterarPrecoSku"
+    },
+    {
+      "name": "modify_prices"
+    },
+    {
+      "name": "read_prices"
+    },
+    {
+      "name": "vbase-read-write"
     }
   ],
   "$schema": "https://raw.githubusercontent.com/vtex/node-vtex-api/master/gen/manifest.schema"
