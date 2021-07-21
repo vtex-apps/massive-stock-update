@@ -1,37 +1,37 @@
 {
+  "name": "massive-stock-update",
   "vendor": "vtexarg",
-  "name": "massiveUpdate",
-  "version": "0.0.1",
-  "title": "Massive Update",
-  "description": "Massive Update component",
-  "defaultLocale": "es-AR",
+  "version": "0.1.0",
+  "title": "Service Example",
+  "description": "Reference app for VTEX IO Services",
+  "mustUpdateAt": "2018-01-04",
+  "categories": [],
+  "dependencies": {},
   "builders": {
-    "messages": "1.x",
-    "store": "0.x",
-    "react": "3.x",
-    "graphql": "1.x",
     "node": "6.x",
-    "admin": "0.x",
     "docs": "0.x"
   },
-  "dependencies": {
-    "vtex.styleguide": "9.x",
-    "vtex.css-handles": "0.x",
-    "vtex.search-graphql": "0.x",
-    "vtex.product-context": "0.x",
-    "vtex.slider-layout": "0.x",
-    "vtex.catalog-graphql": "1.x"
+  "scripts": {
+    "prereleasy": "bash lint.sh"
   },
+  "credentialType": "absolute",
   "policies": [
     {
-      "name": "vtex.catalog-graphql:resolve-graphql"
+      "name": "outbound-access",
+      "attrs": {
+        "host": "portal.vtexcommercebeta.com.br",
+        "path": "/api/logistics/pvt/*"
+      }
     },
     {
       "name": "outbound-access",
       "attrs": {
-        "host": "{{account}}.myvtex.com",
-        "path": "/*"
+        "host": "portal.vtexcommercestable.com.br",
+        "path": "/api/logistics/pvt/*"
       }
+    },
+    {
+      "name": "LogisticsAdmin"
     },
     {
       "name": "outbound-access",
@@ -43,34 +43,24 @@
     {
       "name": "outbound-access",
       "attrs": {
-        "host": "portal.vtexcommercebeta.com.br",
-        "path": "/api/*"
+        "host": "portal.vtexcommercestable.com.br",
+        "path": "/api/oms/*"
       }
     },
     {
-      "name": "outbound-access",
-      "attrs": {
-        "host": "{{account}}.vtexcommercestable.com.br",
-        "path": "/api/*"
-      }
+      "name": "OMSViewer"
     },
     {
-      "name": "Get_Account_By_Identifier"
+      "name": "POWER_USER_DS"
     },
     {
-      "name": "vbase-read-write"
+      "name": "AdminPortal"
     },
     {
-      "name": "AlterarPrecoSku"
+      "name": "colossus-fire-event"
     },
     {
-      "name": "modify_prices"
-    },
-    {
-      "name": "read_prices"
-    },
-    {
-      "name": "vbase-read-write"
+      "name": "colossus-write-logs"
     }
   ],
   "$schema": "https://raw.githubusercontent.com/vtex/node-vtex-api/master/gen/manifest.schema"
