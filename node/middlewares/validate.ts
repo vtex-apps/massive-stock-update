@@ -1,23 +1,35 @@
-import { UserInputError } from '@vtex/api'
+import { json } from 'co-body'
 
 export async function validate(ctx: Context, next: () => Promise<any>) {
-  const {
-    vtex: {
-      route: { params },
-    },
-  } = ctx
+  // console.log("validate middleware");
+  const body = await json(ctx.req)
 
-  console.info('Received params:', params)
+  // console.log("body", body);
+  for (const i in body) {
+    const item = body[i]
+    const { sku } = item
+    const { warehouseId } = item
+    const { quantity } = item
+    const { unlimited } = item
 
-  const { code } = params
+    if (
+      !(
+        typeof sku === 'number' &&
+        typeof warehouseId === 'number' &&
+        typeof quantity === 'number' &&
+        typeof unlimited === 'boolean'
+      )
+    ) {
+      ctx.status = 400
+      ctx.body = {
+        error: `TypeError: Some field does not have a valid type: {sku:${sku}, warehouseId:${warehouseId}, quantity:${quantity}, unlimited:${unlimited}}`,
+      }
 
-  if (!code) {
-    throw new UserInputError('Code is required') // Wrapper for a Bad Request (400) HTTP Error. Check others in https://github.com/vtex/node-vtex-api/blob/fd6139349de4e68825b1074f1959dd8d0c8f4d5b/src/errors/index.ts
+      return
+    }
   }
 
-  const codeNumber = parseInt(code as string, 10)
-
-  ctx.state.code = codeNumber
-
+  ctx.state.validatedBody = body
+  // console.log("validate middleware Ok");
   await next()
 }
