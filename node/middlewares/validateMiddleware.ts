@@ -1,10 +1,11 @@
 import { json } from 'co-body'
 
-export async function validate(ctx: Context, next: () => Promise<any>) {
-  // console.log("validate middleware");
+export async function validateMiddleware(
+  ctx: Context,
+  next: () => Promise<any>
+) {
   const body = await json(ctx.req)
 
-  // console.log("body", body);
   for (const i in body) {
     const item = body[i]
     const { sku } = item
@@ -21,8 +22,10 @@ export async function validate(ctx: Context, next: () => Promise<any>) {
       )
     ) {
       ctx.status = 400
-      ctx.body = {
-        error: `TypeError: Some field does not have a valid type: {sku:${sku}, warehouseId:${warehouseId}, quantity:${quantity}, unlimited:${unlimited}}`,
+      ctx.response.body = {
+        error: 'Request failed with status code 400',
+        status: 'Bad Request',
+        errorMessage: `Some field does not have a valid type: {sku:${sku}, warehouseId:${warehouseId}, quantity:${quantity}, unlimited:${unlimited}}`,
       }
 
       return
@@ -30,6 +33,5 @@ export async function validate(ctx: Context, next: () => Promise<any>) {
   }
 
   ctx.state.validatedBody = body
-  // console.log("validate middleware Ok");
   await next()
 }
