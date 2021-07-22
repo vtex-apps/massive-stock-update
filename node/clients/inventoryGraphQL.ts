@@ -31,11 +31,16 @@ interface InventoryProductQuantityUpdateOutput {
   errorMessage: string
 }
 
-export default class Inventory extends AppGraphQLClient {
+export default class InventoryGraphQL extends AppGraphQLClient {
   constructor(ctx: IOContext, opts?: InstanceOptions) {
     super(INVENTORY_GRAPHQL_APP, ctx, opts)
   }
 
+  /**
+   * Update one or many inventories by searching through SKUs and warehouse.
+   * @param args InventoryProductQuantityUpdateInput
+   * @returns InventoryProductQuantityUpdateOutput
+   */
   public updateInventory = (args: InventoryProductQuantityUpdateInput[]) => {
     try {
       return this.graphql.mutate<
