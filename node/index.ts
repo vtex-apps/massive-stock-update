@@ -2,9 +2,8 @@ import type { ClientsConfig, ServiceContext, RecorderState } from '@vtex/api'
 import { LRUCache, method, Service } from '@vtex/api'
 
 import { Clients } from './clients'
-// import { updateStock } from './middlewares/updateStock'
-import { updateStockExternal } from './middlewares/updateStockExternal'
-import { validate } from './middlewares/validate'
+import { inventoryMiddleware } from './middlewares/inventoryMiddleware'
+import { validateMiddleware } from './middlewares/validateMiddleware'
 
 const TIMEOUT_MS = 800
 
@@ -46,6 +45,12 @@ declare global {
     quantity: number
     unlimited: boolean
   }
+
+  interface InventoryMiddlewareResponse {
+    sku: number
+    warehouseId: number
+    success: string
+  }
 }
 
 // Export a service that defines route handlers and client options.
@@ -54,11 +59,7 @@ export default new Service({
   routes: {
     // `status` is the route ID from service.json. It maps to an array of middlewares (or a single handler).
     status: method({
-      POST: [
-        validate,
-        /* updateStock */
-        updateStockExternal,
-      ],
+      POST: [validateMiddleware, inventoryMiddleware],
     }),
   },
 })
