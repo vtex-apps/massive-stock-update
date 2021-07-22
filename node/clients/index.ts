@@ -1,15 +1,15 @@
 import { IOClients } from '@vtex/api'
 
-import Inventory from './inventory'
-import InventoryExternal from './inventoryExternal'
+import InventoryGraphQL from './inventoryGraphQL'
+import InventoryRestClient from './inventoryRestClient'
 
 // Extend the default IOClients implementation with our own custom clients.
 export class Clients extends IOClients {
-  public get inventory() {
-    return this.getOrSet('inventory', Inventory)
+  public get inventoryGraphQL() {
+    return this.getOrSet('inventoryGraphQL', InventoryGraphQL)
   }
 
-  public get inventoryExternal() {
-    return this.getOrSet('inventoryExternal', InventoryExternal)
+  public get inventoryRestClient() {
+    return this.getOrSet('inventoryRestClient', InventoryRestClient)
   }
 }
