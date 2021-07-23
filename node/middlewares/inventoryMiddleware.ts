@@ -59,6 +59,6 @@ export type Body = {
   unlimited: boolean
 }
 
-type MyHeaders = {
+/* type MyHeaders = {
   'x-vtex-error-message': string
-}
+} */
