@@ -7,7 +7,7 @@
   "workers": 1,
   "routes": {
     "status": {
-      "path": "/_v/status/:code",
+      "path": "/_v/massiveUpdate",
       "public": true
     }
   }
