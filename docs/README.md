@@ -16,7 +16,7 @@ Massive inventory stock update service through SKU and warehouseId
 
 - Required
   - sku [int32] 
-  - warehouseId [int32]
+  - warehouseId [int32] || [string]
   - quantity [int32]
   - unlimited [boolean]
    

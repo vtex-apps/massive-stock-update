@@ -41,14 +41,14 @@ declare global {
 
   interface InventoryItem {
     sku: number
-    warehouseId: number
+    warehouseId: number | string
     quantity: number
     unlimited: boolean
   }
 
   interface InventoryMiddlewareResponse {
     sku: number
-    warehouseId: number
+    warehouseId: number | string
     success: string
   }
 }

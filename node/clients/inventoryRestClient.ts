@@ -29,7 +29,7 @@ export default class InventoryRestClient extends ExternalClient {
   public async updateInventory(
     body: Body,
     skuId: number,
-    warehouseId: number
+    warehouseId: number | string
   ): Promise<string> {
     return this.http.put(
       `/api/logistics/pvt/inventory/skus/${skuId}/warehouses/${warehouseId}`,

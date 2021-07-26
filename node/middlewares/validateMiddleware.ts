@@ -16,7 +16,7 @@ export async function validateMiddleware(
     if (
       !(
         typeof sku === 'number' &&
-        typeof warehouseId === 'number' &&
+        (typeof warehouseId === 'number' || typeof warehouseId === 'string') &&
         typeof quantity === 'number' &&
         typeof unlimited === 'boolean'
       )
