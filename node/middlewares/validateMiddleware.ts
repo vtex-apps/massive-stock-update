@@ -5,6 +5,7 @@ export async function validateMiddleware(
   next: () => Promise<any>
 ) {
   const body = await json(ctx.req)
+  const errorList: InventoryMiddlewareResponse[] = []
 
   for (const i in body) {
     const item = body[i]
@@ -21,15 +22,23 @@ export async function validateMiddleware(
         typeof unlimited === 'boolean'
       )
     ) {
-      ctx.status = 400
-      ctx.response.body = {
+      errorList.push({
+        sku,
+        warehouseId,
+        success: 'false',
         error: 'Request failed with status code 400',
-        status: 'Bad Request',
-        errorMessage: `Some field does not have a valid type: {sku:${sku}, warehouseId:${warehouseId}, quantity:${quantity}, unlimited:${unlimited}}`,
-      }
-
-      return
+        errorMessage: `Some field does not have a valid type`,
+      })
     }
+  }
+
+  if (errorList.length >= 1) {
+    ctx.status = 400
+    ctx.response.body = {
+      message: errorList,
+    }
+
+    return
   }
 
   ctx.state.validatedBody = body

@@ -7,29 +7,17 @@ export async function inventoryMiddleware(
     state: { validatedBody },
   } = ctx
 
-  try {
-    const response = await Promise.all(
-      validatedBody.map(async (arg) => {
-        return updateInventory(arg)
-      })
-    )
+  const response = await Promise.all(
+    validatedBody.map(async (arg) => {
+      return updateInventory(arg)
+    })
+  )
 
-    ctx.body = {
-      message: response,
-    }
-    ctx.status = 200
-    await next()
-  } catch (error) {
-    const { headers } = error.response
-    const errorMessage = headers['x-vtex-error-message'].split('%20').join(' ')
-
-    ctx.status = 400
-    ctx.response.body = {
-      error: error.message,
-      status: error.response.statusText,
-      errorMessage,
-    }
+  ctx.body = {
+    message: response,
   }
+  ctx.status = 200
+  await next()
 
   async function updateInventory(
     arg: InventoryItem
@@ -41,16 +29,33 @@ export async function inventoryMiddleware(
       unlimited: arg.unlimited,
     }
 
-    const updateInventoryRestClientResponse =
-      await inventoryRestClient.updateInventory(body, sku, warehouseId)
+    try {
+      const updateInventoryRestClientResponse =
+        await inventoryRestClient.updateInventory(body, sku, warehouseId)
 
-    const inventoryMiddlewareResponse: InventoryMiddlewareResponse = {
-      sku: arg.sku,
-      success: updateInventoryRestClientResponse,
-      warehouseId: arg.warehouseId,
+      const inventoryMiddlewareResponse: InventoryMiddlewareResponse = {
+        sku: arg.sku,
+        success: updateInventoryRestClientResponse,
+        warehouseId: arg.warehouseId,
+      }
+
+      return inventoryMiddlewareResponse
+    } catch (error) {
+      const { headers } = error.response
+      const errorMessage = headers['x-vtex-error-message']
+        .split('%20')
+        .join(' ')
+
+      const updateInventoryRestClientErrorResponse = {
+        sku: arg.sku,
+        success: 'false',
+        warehouseId: arg.warehouseId,
+        error: error.message,
+        errorMessage,
+      }
+
+      return updateInventoryRestClientErrorResponse
     }
-
-    return inventoryMiddlewareResponse
   }
 }
 
@@ -58,7 +63,3 @@ export type Body = {
   quantity: number
   unlimited: boolean
 }
-
-/* type MyHeaders = {
-  'x-vtex-error-message': string
-} */

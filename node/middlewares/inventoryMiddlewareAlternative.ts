@@ -9,7 +9,6 @@ export async function inventoryMiddlewareAlternative(
   } = ctx
 
   // const body = await json(ctx.req)
-  // TODO: No funcionan las politicas para usar este provider.
   const response = await inventoryGraphQL.updateInventory([
     {
       sku: 2,
