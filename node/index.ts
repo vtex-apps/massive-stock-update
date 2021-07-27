@@ -50,6 +50,8 @@ declare global {
     sku: number
     warehouseId: number | string
     success: string
+    error?: string
+    errorMessage?: string
   }
 }
 

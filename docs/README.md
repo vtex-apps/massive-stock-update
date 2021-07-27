@@ -74,9 +74,15 @@ Massive inventory stock update service through SKU and warehouseId
 
 ```json
 {
-    "error": "",
-    "status": "",
-    "errorMessage": ""
+    "message": [
+        {
+            "sku": "",
+            "warehouseId": "",
+            "success": "false",
+            "error": "",
+            "errorMessage": ""
+        }
+    ]
 }
 ```
 
