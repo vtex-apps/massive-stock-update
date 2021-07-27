@@ -1,0 +1,12 @@
+{
+  "name": "Massive Stock Update",
+  "headline": "Atualize o estoque por lotes.",
+  "overview": "Serviço de atualização de estoque em massa via SKU e warehouseId.",
+  "features": [
+    "Serviço de atualização de estoque em massa via SKU e warehouseId."
+  ],
+  "websiteURL": "https://vtex.com/",
+  "support": {
+    "url": "https://support.vtex.com/hc/requests"
+  }
+}
