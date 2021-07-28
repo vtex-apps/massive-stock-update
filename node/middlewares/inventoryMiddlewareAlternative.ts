@@ -1,5 +1,3 @@
-// import { json } from "co-body"
-
 export async function inventoryMiddlewareAlternative(
   ctx: Context,
   next: () => Promise<any>
@@ -8,7 +6,6 @@ export async function inventoryMiddlewareAlternative(
     clients: { inventoryGraphQL },
   } = ctx
 
-  // const body = await json(ctx.req)
   const response = await inventoryGraphQL.updateInventory([
     {
       sku: 2,
