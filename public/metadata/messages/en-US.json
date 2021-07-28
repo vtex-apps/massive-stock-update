@@ -1,7 +1,7 @@
 {
   "name": "Massive Stock Update",
   "headline": "Update the stock by batches.",
-  "overview": "Massive inventory stock update service through SKU and warehouseId.",
+  "overview": "Update stock in batched to decrease integrations times and requests overhead.",
   "features": [
     "Massive inventory stock update service through SKU and warehouseId."
   ],

@@ -1,7 +1,7 @@
 {
   "name": "Massive Stock Update",
   "headline": "Actualice el stock mediante lotes.",
-  "overview": "Servicio de actualización masiva de inventario a través de SKU y warehouseId",
+  "overview": "Actualice el stock por lotes para reducir los tiempos de integración y los gastos generales de las solicitudes.",
   "features": [
     "Servicio de actualización masiva de inventario a través de SKU y warehouseId."
   ],
