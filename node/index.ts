@@ -61,7 +61,7 @@ export default new Service({
   routes: {
     // `status` is the route ID from service.json. It maps to an array of middlewares (or a single handler).
     status: method({
-      POST: [validateMiddleware, inventoryMiddleware],
+      PUT: [validateMiddleware, inventoryMiddleware],
     }),
   },
 })
