@@ -1,7 +1,7 @@
 {
   "name": "massive-stock-update",
   "vendor": "vtexarg",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "title": "Massive stock update",
   "description": "Reference app for VTEX IO Services",
   "mustUpdateAt": "2018-01-04",
