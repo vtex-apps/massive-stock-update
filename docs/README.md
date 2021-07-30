@@ -3,7 +3,7 @@ Massive inventory stock update service through SKU and warehouseId
 
 ##### `PUT `
 
-```https://{environment}--{accountName}.myvtex.com/_v/massiveUpdate```
+```https://{environment}--{accountName}.myvtex.com/_v/massive/stock/update```
 
  
 ### Headers
