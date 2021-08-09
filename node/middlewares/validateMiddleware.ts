@@ -7,12 +7,8 @@ export async function validateMiddleware(
   const body = await json(ctx.req)
   const errorList: InventoryMiddlewareResponse[] = []
 
-  for (const i in body) {
-    const item = body[i]
-    const { sku } = item
-    const { warehouseId } = item
-    const { quantity } = item
-    const { unlimited } = item
+  for (const i of body) {
+    const { sku, warehouseId, quantity, unlimited } = i
 
     if (
       !(

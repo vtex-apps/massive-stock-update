@@ -22,11 +22,10 @@ export async function inventoryMiddleware(
   async function updateInventory(
     arg: InventoryItem
   ): Promise<InventoryMiddlewareResponse> {
-    const { sku } = arg
-    const { warehouseId } = arg
+    const { sku, warehouseId, quantity, unlimited } = arg
     const body: Body = {
-      quantity: arg.quantity,
-      unlimited: arg.unlimited,
+      quantity,
+      unlimited,
     }
 
     try {
