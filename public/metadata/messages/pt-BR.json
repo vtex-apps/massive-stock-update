@@ -1,7 +1,7 @@
 {
   "name": "Massive Stock Update",
-  "headline": "Atualize o estoque por lotes.",
-  "overview": "Atualize o estoque em lote para diminuir os tempos de integração e a sobrecarga de solicitações.",
+  "headline": "Atualize o estoque por massas.",
+  "overview": "Atualize o estoque em massa para diminuir os tempos de integração e a sobrecarga de solicitações.",
   "features": [
     "Serviço de atualização de estoque em massa via SKU e warehouseId."
   ],
