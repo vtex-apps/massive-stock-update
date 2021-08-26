@@ -7,32 +7,38 @@ export async function inventoryMiddleware(
     state: { validatedBody },
   } = ctx
 
-  const response = await Promise.all(
+  const responseList = await Promise.all(
     validatedBody.map(async (arg) => {
       return updateInventory(arg)
     })
   )
 
   ctx.body = {
-    message: response,
+    responseList,
   }
   ctx.status = 200
   await next()
 
-  async function updateInventory(
-    arg: InventoryItem
-  ): Promise<InventoryMiddlewareResponse> {
-    const { sku, warehouseId, quantity, unlimited } = arg
-    const body: Body = {
+  async function updateInventory(arg: UpdateRequest): Promise<UpdateResponse> {
+    const {
+      sku,
+      warehouseId,
       quantity,
-      unlimited,
+      unlimitedQuantity,
+      dateUtcOnBalanceSystem,
+    } = arg
+
+    const body: UpdateinventoryBySkuAndWarehouseRequest = {
+      quantity,
+      dateUtcOnBalanceSystem,
+      unlimitedQuantity,
     }
 
     try {
       const updateInventoryRestClientResponse =
         await inventoryRestClient.updateInventory(body, sku, warehouseId)
 
-      const inventoryMiddlewareResponse: InventoryMiddlewareResponse = {
+      const inventoryMiddlewareResponse: UpdateResponse = {
         sku: arg.sku,
         success: updateInventoryRestClientResponse,
         warehouseId: arg.warehouseId,
@@ -49,7 +55,7 @@ export async function inventoryMiddleware(
         sku: arg.sku,
         success: 'false',
         warehouseId: arg.warehouseId,
-        error: error.message,
+        error: error.response.status,
         errorMessage,
       }
 
@@ -58,7 +64,8 @@ export async function inventoryMiddleware(
   }
 }
 
-export type Body = {
+export type UpdateinventoryBySkuAndWarehouseRequest = {
+  unlimitedQuantity: boolean
+  dateUtcOnBalanceSystem: string
   quantity: number
-  unlimited: boolean
 }

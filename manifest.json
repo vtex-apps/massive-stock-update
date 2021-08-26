@@ -3,7 +3,7 @@
   "vendor": "vtexarg",
   "version": "2.0.3",
   "title": "Massive stock update",
-  "description": "Reference app for VTEX IO Services",
+  "description": "Massive inventory stock update",
   "mustUpdateAt": "2018-01-04",
   "categories": [],
   "dependencies": {},
@@ -16,9 +16,7 @@
       "url": "https://support.vtex.com/hc/requests"
     },
     "type": "free",
-    "availableCountries": [
-      "*"
-    ]
+    "availableCountries": ["*"]
   },
   "scripts": {
     "prereleasy": "bash lint.sh"
@@ -47,13 +45,6 @@
       "attrs": {
         "host": "portal.vtexcommercestable.com.br",
         "path": "/api/*"
-      }
-    },
-    {
-      "name": "outbound-access",
-      "attrs": {
-        "host": "portal.vtexcommercestable.com.br",
-        "path": "/api/oms/*"
       }
     },
     {

@@ -18,8 +18,11 @@ Massive inventory stock update service through SKU and warehouseId
   - sku [int32] 
   - warehouseId [int32] || [string]
   - quantity [int32]
-  - unlimited [boolean]
+  - unlimitedQuantity [boolean]
+  - dateUtcOnBalanceSystem [string]
    
+>   Read the API information for more information [link](https://developers.vtex.com/vtex-rest-api/reference/inventory#updateinventorybyskuandwarehouse)
+
 ### Request body example
 
 ```json
@@ -28,19 +31,8 @@ Massive inventory stock update service through SKU and warehouseId
       "sku":1,
       "warehouseId":123,
       "quantity":50,
-      "unlimited":true
-   },
-   {
-      "sku":2,
-      "warehouseId":123,
-      "quantity":10,
-      "unlimited":false
-   },
-   {
-      "sku":3,
-      "warehouseId":123,
-      "quantity":22,
-      "unlimited":false
+      "unlimitedQuantity":false,
+      "dateUtcOnBalanceSystem": null
    }
 ]
      
@@ -55,16 +47,6 @@ Massive inventory stock update service through SKU and warehouseId
          "sku":1,
          "success":true,
          "warehouseId":123
-      },
-      {
-         "sku":2,
-         "success":true,
-         "warehouseId":123
-      },
-      {
-         "sku":3,
-         "success":true,
-         "warehouseId":123
       }
    ]
 }
@@ -76,11 +58,11 @@ Massive inventory stock update service through SKU and warehouseId
 {
     "message": [
         {
-            "sku": "",
-            "warehouseId": "",
+            "sku": "3",
             "success": "false",
-            "error": "",
-            "errorMessage": ""
+            "warehouseId": 1236,
+            "error": 400,
+            "errorMessage": "Warehouse 1236 does not exist!"
         }
     ]
 }

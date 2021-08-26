@@ -1,7 +1,7 @@
-import type { InstanceOptions, IOContext } from '@vtex/api'
 import { ExternalClient } from '@vtex/api'
+import type { InstanceOptions, IOContext } from '@vtex/api'
 
-import type { Body } from '../middlewares/inventoryMiddleware'
+import type { UpdateinventoryBySkuAndWarehouseRequest } from '../middlewares/inventoryMiddleware'
 
 export default class InventoryRestClient extends ExternalClient {
   constructor(context: IOContext, options?: InstanceOptions) {
@@ -27,7 +27,7 @@ export default class InventoryRestClient extends ExternalClient {
    * @returns
    */
   public async updateInventory(
-    body: Body,
+    body: UpdateinventoryBySkuAndWarehouseRequest,
     skuId: number,
     warehouseId: number | string
   ): Promise<string> {

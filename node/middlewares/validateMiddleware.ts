@@ -1,42 +1,74 @@
+import { UserInputError } from '@vtex/api'
 import { json } from 'co-body'
 
 export async function validateMiddleware(
   ctx: Context,
   next: () => Promise<any>
 ) {
-  const body = await json(ctx.req)
-  const errorList: InventoryMiddlewareResponse[] = []
+  const requestList = await json(ctx.req)
+  const errorList: any[] = []
 
-  for (const i of body) {
-    const { sku, warehouseId, quantity, unlimited } = i
+  function requestValidator(request: UpdateRequest): void {
+    const requestErrorList: UpdateResponse[] = []
 
-    if (
-      !(
-        typeof sku === 'number' &&
-        (typeof warehouseId === 'number' || typeof warehouseId === 'string') &&
-        typeof quantity === 'number' &&
-        typeof unlimited === 'boolean'
-      )
-    ) {
-      errorList.push({
-        sku,
-        warehouseId,
-        success: 'false',
-        error: 'Request failed with status code 400',
-        errorMessage: `Some field does not have a valid type`,
-      })
+    const {
+      sku,
+      warehouseId,
+      quantity,
+      unlimitedQuantity,
+      dateUtcOnBalanceSystem,
+    } = request
+
+    if (!sku) {
+      requestErrorList.push(errorResponseGenerator('sku'))
     }
+
+    if (!warehouseId) {
+      requestErrorList.push(errorResponseGenerator('warehouseId'))
+    }
+
+    if (!quantity) {
+      requestErrorList.push(errorResponseGenerator('quantity'))
+    }
+
+    if (typeof unlimitedQuantity === 'undefined') {
+      requestErrorList.push(errorResponseGenerator('unlimitedQuantity'))
+    }
+
+    if (typeof dateUtcOnBalanceSystem === 'undefined') {
+      requestErrorList.push(errorResponseGenerator('dateUtcOnBalanceSystem'))
+    }
+
+    if (requestErrorList.length >= 1) {
+      errorList.push(requestErrorList)
+    }
+
+    function errorResponseGenerator(field: string): UpdateResponse {
+      return {
+        success: 'false',
+        error: 400,
+        errorMessage: `The request is invalid:  The '${field}' field is required.`,
+      }
+    }
+  }
+
+  try {
+    for (const request of requestList) {
+      requestValidator(request)
+    }
+  } catch (error) {
+    throw new UserInputError(error)
   }
 
   if (errorList.length >= 1) {
     ctx.status = 400
     ctx.response.body = {
-      message: errorList,
+      errorList,
     }
 
     return
   }
 
-  ctx.state.validatedBody = body
+  ctx.state.validatedBody = requestList
   await next()
 }

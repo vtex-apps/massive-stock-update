@@ -36,21 +36,22 @@ declare global {
 
   // The shape of our State object found in `ctx.state`. This is used as state bag to communicate between middlewares.
   interface State extends RecorderState {
-    validatedBody: [InventoryItem]
+    validatedBody: [UpdateRequest]
   }
 
-  interface InventoryItem {
+  interface UpdateRequest {
     sku: number
     warehouseId: number | string
     quantity: number
-    unlimited: boolean
+    unlimitedQuantity: boolean
+    dateUtcOnBalanceSystem: string
   }
 
-  interface InventoryMiddlewareResponse {
-    sku: number
-    warehouseId: number | string
+  interface UpdateResponse {
+    sku?: number
+    warehouseId?: number | string
     success: string
-    error?: string
+    error?: number | string
     errorMessage?: string
   }
 }
