@@ -7,35 +7,49 @@ export async function inventoryMiddleware(
     state: { validatedBody },
   } = ctx
 
-  const start = Date.now()
-
-  // eslint-disable-next-line no-console
   const responseList = []
 
   for (let index = 0; index < validatedBody.length; index++) {
     const element = validatedBody[index]
 
-    // eslint-disable-next-line no-console
-    console.log('index', `${index + 1}/${validatedBody.length}`)
-
     try {
-      // eslint-disable-next-line no-await-in-loop
-      const response = await updateInventory(element)
+      const {
+        sku,
+        warehouseId,
+        quantity,
+        unlimitedQuantity,
+        dateUtcOnBalanceSystem,
+      } = element
 
-      responseList.push(response)
+      const body: UpdateinventoryBySkuAndWarehouseRequest = {
+        quantity,
+        dateUtcOnBalanceSystem,
+        unlimitedQuantity,
+      }
+
+      // eslint-disable-next-line no-await-in-loop
+      const getSkuResponse = await inventoryRestClient.getSku(sku)
+      // eslint-disable-next-line no-await-in-loop
+      const updateInventoryResponse = await inventoryRestClient.updateInventory(
+        body,
+        getSkuResponse.data.Id,
+        warehouseId
+      )
+
+      const inventoryMiddlewareResponse: UpdateResponse = {
+        sku: getSkuResponse.data.Id,
+        success: updateInventoryResponse.data,
+        warehouseId,
+      }
+
+      responseList.push(inventoryMiddlewareResponse)
     } catch (error) {
       if (error.response.status === 429) {
         const {
           response: { headers },
         } = error
 
-        // eslint-disable-next-line no-console
-        console.log('ratelimit', headers['x-ratelimit-reset'])
-
-        setTimeout(() => {
-          // eslint-disable-next-line no-console
-          console.log('timeout')
-        }, parseFloat(headers['x-ratelimit-reset']) * 1000)
+        setTimeout(() => {}, parseFloat(headers['x-ratelimit-reset']) * 1000)
         index--
         continue
       } else {
@@ -52,56 +66,12 @@ export async function inventoryMiddleware(
     }
   }
 
-  /*   responseList = await Promise.all(
-      validatedBody.map(async (arg) => {
-        return updateInventory(arg)
-      })
-    )
-   */
   ctx.body = {
     responseList,
   }
   ctx.status = 200
-  const end = Date.now()
 
-  // eslint-disable-next-line no-console
-  console.log(end - start)
-
-  // eslint-disable-next-line no-console
-  //
   await next()
-
-  async function updateInventory(arg: UpdateRequest): Promise<UpdateResponse> {
-    const {
-      sku,
-      warehouseId,
-      quantity,
-      unlimitedQuantity,
-      dateUtcOnBalanceSystem,
-    } = arg
-
-    const body: UpdateinventoryBySkuAndWarehouseRequest = {
-      quantity,
-      dateUtcOnBalanceSystem,
-      unlimitedQuantity,
-    }
-
-    const getSkuResponse = await inventoryRestClient.getSku(sku)
-
-    const updateInventoryResponse = await inventoryRestClient.updateInventory(
-      body,
-      getSkuResponse.data.Id,
-      warehouseId
-    )
-
-    const inventoryMiddlewareResponse: UpdateResponse = {
-      sku: getSkuResponse.data.Id,
-      success: updateInventoryResponse.data,
-      warehouseId: arg.warehouseId,
-    }
-
-    return inventoryMiddlewareResponse
-  }
 }
 
 export type UpdateinventoryBySkuAndWarehouseRequest = {
