@@ -1,5 +1,5 @@
 import { ExternalClient } from '@vtex/api'
-import type { InstanceOptions, IOContext } from '@vtex/api'
+import type { InstanceOptions, IOContext, IOResponse } from '@vtex/api'
 
 import type { UpdateinventoryBySkuAndWarehouseRequest } from '../middlewares/inventoryMiddleware'
 
@@ -19,21 +19,22 @@ export default class InventoryRestClient extends ExternalClient {
     })
   }
 
-  /**
-   * Updates inventory by searching through SKU and warehouse.
-   * @param body
-   * @param skuId
-   * @param warehouseId
-   * @returns
-   */
   public async updateInventory(
     body: UpdateinventoryBySkuAndWarehouseRequest,
     skuId: number,
     warehouseId: number | string
-  ): Promise<string> {
-    return this.http.put(
+  ): Promise<IOResponse<string>> {
+    return this.http.putRaw(
       `/api/logistics/pvt/inventory/skus/${skuId}/warehouses/${warehouseId}`,
       body
     )
   }
+
+  public async getSku(skuId: number): Promise<IOResponse<GetSKUResponse>> {
+    return this.http.getRaw(`/api/catalog/pvt/stockkeepingunit/${skuId}`)
+  }
+}
+
+export interface GetSKUResponse {
+  Id: number
 }
