@@ -1,5 +1,5 @@
 {
-  "memory": 512,
+  "memory": 256,
   "ttl": 10,
   "timeout": 60,
   "minReplicas": 2,
@@ -8,7 +8,7 @@
   "routes": {
     "status": {
       "path": "/_v/massive/stock/update",
-      "public": true
+      "public": false
     }
   }
 }
