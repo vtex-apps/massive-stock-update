@@ -5,7 +5,7 @@ import { Clients } from './clients'
 import { inventoryMiddleware } from './middlewares/inventoryMiddleware'
 import { validateMiddleware } from './middlewares/validateMiddleware'
 
-const TIMEOUT_MS = 800
+const TIMEOUT_MS = 60000
 
 // Create a LRU memory cache for the Status client.
 // The @vtex/api HttpClient respects Cache-Control headers and uses the provided cache.
@@ -41,18 +41,21 @@ declare global {
 
   interface UpdateRequest {
     sku: number
-    warehouseId: number | string
-    quantity: number
-    unlimitedQuantity: boolean
-    dateUtcOnBalanceSystem: string
+    warehouseId?: number | string
+    quantity?: number
+    unlimitedQuantity?: boolean
+    dateUtcOnBalanceSystem?: string
   }
 
   interface UpdateResponse {
-    sku?: number
+    sku: number
     warehouseId?: number | string
     success: string
     error?: number | string
     errorMessage?: string
+    quantity?: number
+    unlimitedQuantity?: boolean
+    dateUtcOnBalanceSystem?: string
   }
 }
 

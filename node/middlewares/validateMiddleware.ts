@@ -45,9 +45,14 @@ export async function validateMiddleware(
 
     function errorResponseGenerator(field: string): UpdateResponse {
       return {
+        sku,
+        warehouseId,
+        quantity,
+        unlimitedQuantity,
+        dateUtcOnBalanceSystem,
         success: 'false',
         error: 400,
-        errorMessage: `The request is invalid:  The '${field}' field is required.`,
+        errorMessage: `The request is invalid: The '${field}' field is required.`,
       }
     }
   }
