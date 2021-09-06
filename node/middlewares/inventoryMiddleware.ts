@@ -24,33 +24,41 @@ export async function inventoryMiddleware(
 
   // const expected = await retryOperation(withERROR)
 
-  const expected = await operationRetry(
-    await Promise.all(
-      validatedBody.map(async (arg) => {
-        return updateInventory(arg)
-      })
+  try {
+    const expected = await operationRetry(
+      await Promise.all(
+        validatedBody.map(async (arg) => {
+          return updateInventory(arg)
+        })
+      )
     )
-  )
 
-  // eslint-disable-next-line no-console
-  console.log('expected', expected)
-  if (expected) {
-    // eslint-disable-next-line array-callback-return
-    const responseOk: UpdateResponse[] = responseList.filter((e) => {
-      return e.success !== 'false'
-    })
+    // eslint-disable-next-line no-console
+    console.log('expected', expected)
+    if (expected) {
+      // eslint-disable-next-line array-callback-return
+      const responseOk: UpdateResponse[] = responseList.filter((e) => {
+        return e.success !== 'false'
+      })
 
-    // eslint-disable-next-line array-callback-return
-    const responseBad: UpdateResponse[] = responseList.filter((e) => {
-      return e.success === 'false'
-    })
+      // eslint-disable-next-line array-callback-return
+      const responseBad: UpdateResponse[] = responseList.filter((e) => {
+        return e.success === 'false'
+      })
 
-    ctx.body = {
-      responseOk,
-      responseBad,
-      count: responseList.length,
+      ctx.body = {
+        responseOk,
+        responseBad,
+        count: responseList.length,
+      }
+      ctx.status = 200
+      await next()
     }
-    ctx.status = 200
+  } catch (error) {
+    // eslint-disable-next-line no-console
+    ctx.status = 450
+    // eslint-disable-next-line no-console
+    console.log('que paso ahora', error)
     await next()
   }
 
@@ -70,14 +78,8 @@ export async function inventoryMiddleware(
     }
 
     try {
-      const getSkuResponse = await inventoryRestClient.getSku(sku)
-
       const updateInventoryRestClientResponse =
-        await inventoryRestClient.updateInventory(
-          body,
-          getSkuResponse.data.Id,
-          warehouseId
-        )
+        await inventoryRestClient.updateInventory(body, sku, warehouseId)
 
       const inventoryMiddlewareResponse: UpdateResponse = {
         sku: arg.sku,
@@ -102,6 +104,8 @@ export async function inventoryMiddleware(
       if (error.response.status === 429) {
         // eslint-disable-next-line no-console
         console.log('header', error.response.headers['x-ratelimit-reset'])
+        // eslint-disable-next-line no-console
+        console.log('headers', error.response.headers)
         updateInventoryRestClientErrorResponse.errorMessage =
           error.response.headers['x-ratelimit-reset']
       }
@@ -124,7 +128,7 @@ export async function inventoryMiddleware(
     // eslint-disable-next-line @typescript-eslint/no-shadow
     responseList: UpdateResponse[]
   ): Promise<any> {
-    const retryList = []
+    const retryList: UpdateRequest[] = []
     let value = '0'
 
     for (const index in responseList) {
@@ -132,6 +136,9 @@ export async function inventoryMiddleware(
 
       if (response.error && response.error === 429) {
         // eslint-disable-next-line @typescript-eslint/no-use-before-define
+
+        // eslint-disable-next-line no-console
+        console.log('error message:', response.errorMessage)
         if (response.errorMessage && response.errorMessage > value) {
           value = response.errorMessage
         }
@@ -151,18 +158,24 @@ export async function inventoryMiddleware(
 
     if (retryList.length >= 1) {
       // eslint-disable-next-line no-console
-      console.log('reintento activado:')
-      await new Promise((resolve) =>
-        setTimeout(resolve, parseFloat(value) * 1000)
+      console.log(
+        `reintento activado en espera por ${parseFloat(value) * 1000} segundos`
       )
 
-      return operationRetry(
-        await Promise.all(
-          retryList.map(async (arg) => {
-            return updateInventory(arg)
-          })
+      setTimeout(async () => {
+        const retryOperation = await operationRetry(
+          await Promise.all(
+            retryList.map(async (arg) => {
+              return updateInventory(arg)
+            })
+          )
         )
-      )
+
+        // eslint-disable-next-line no-console
+        console.log('respuesta de reintento', retryOperation)
+
+        return retryOperation
+      }, parseFloat(value) * 1000)
     }
 
     return true
