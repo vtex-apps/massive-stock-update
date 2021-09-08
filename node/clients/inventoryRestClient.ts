@@ -1,11 +1,11 @@
-import { ExternalClient } from '@vtex/api'
+import { JanusClient } from '@vtex/api'
 import type { InstanceOptions, IOContext, IOResponse } from '@vtex/api'
 
 import type { UpdateinventoryBySkuAndWarehouseRequest } from '../middlewares/inventoryMiddleware'
 
-export default class InventoryRestClient extends ExternalClient {
+export default class InventoryRestClient extends JanusClient {
   constructor(context: IOContext, options?: InstanceOptions) {
-    super(`http://${context.account}.vtexcommercestable.com.br`, context, {
+    super(context, {
       ...options,
       headers: {
         VtexIdClientAutCookie:
@@ -21,21 +21,12 @@ export default class InventoryRestClient extends ExternalClient {
 
   public async updateInventory(
     body: UpdateinventoryBySkuAndWarehouseRequest,
-    // eslint-disable-next-line @typescript-eslint/default-param-last
     skuId?: number | string,
     warehouseId?: number | string
   ): Promise<IOResponse<string>> {
     return this.http.putRaw(
-      `/api/logistics/pvt/inventory/skus/${skuId}/warehouses/${warehouseId}`,
+      `http://${this.context.account}.vtexcommercestable.com.br/api/logistics/pvt/inventory/skus/${skuId}/warehouses/${warehouseId}`,
       body
     )
   }
-
-  public async getSku(skuId: number): Promise<IOResponse<GetSKUResponse>> {
-    return this.http.getRaw(`/api/catalog/pvt/stockkeepingunit/${skuId}`)
-  }
-}
-
-export interface GetSKUResponse {
-  Id: number | string
 }

@@ -8,68 +8,56 @@ export async function inventoryMiddleware(
   } = ctx
 
   const responseList: UpdateResponse[] = []
-  // let maxRetry = 3
-  /*  const withERROR: UpdateResponse[] = [
-     {
-       sku: 12,
-       success: 'false',
-       warehouseId: 123,
-       unlimitedQuantity: false,
-       dateUtcOnBalanceSystem: undefined,
-       error: 429,
-       errorMessage: 'To many request',
-     },
-     { sku: 13, success: 'true', warehouseId: 123 },
-   ] */
-
-  // const expected = await retryOperation(withERROR)
 
   try {
     const expected = await operationRetry(
       await Promise.all(
-        validatedBody.map(async (arg) => {
-          return updateInventory(arg)
+        validatedBody.map(async (item) => {
+          return updateInventory(item)
         })
       )
     )
 
-    // eslint-disable-next-line no-console
-    console.log('expected', expected)
     if (expected) {
-      // eslint-disable-next-line array-callback-return
-      const responseOk: UpdateResponse[] = responseList.filter((e) => {
+      const successfulResponses: UpdateResponse[] = responseList.filter((e) => {
         return e.success !== 'false'
       })
 
-      // eslint-disable-next-line array-callback-return
-      const responseBad: UpdateResponse[] = responseList.filter((e) => {
+      const failedResponses: UpdateResponse[] = responseList.filter((e) => {
         return e.success === 'false'
       })
 
+      ctx.status = OK
       ctx.body = {
-        responseOk,
-        responseBad,
-        count: responseList.length,
+        successfulResponses: {
+          elements: successfulResponses,
+          quantity: successfulResponses.length,
+        },
+        failedResponses: {
+          elements: failedResponses,
+          quantity: failedResponses.length,
+        },
+        total: responseList.length,
       }
-      ctx.status = 200
+
       await next()
     }
   } catch (error) {
-    // eslint-disable-next-line no-console
-    ctx.status = 450
-    // eslint-disable-next-line no-console
-    console.log('que paso ahora', error)
+    ctx.status = INTERNAL_SERVER_ERROR
+    ctx.body = error
     await next()
   }
 
-  async function updateInventory(arg: UpdateRequest): Promise<UpdateResponse> {
+  async function updateInventory(
+    updateRequest: UpdateRequest
+  ): Promise<UpdateResponse> {
     const {
       sku,
       warehouseId,
       quantity,
       unlimitedQuantity,
       dateUtcOnBalanceSystem,
-    } = arg
+    } = updateRequest
 
     const body: UpdateinventoryBySkuAndWarehouseRequest = {
       quantity,
@@ -82,32 +70,32 @@ export async function inventoryMiddleware(
         await inventoryRestClient.updateInventory(body, sku, warehouseId)
 
       const inventoryMiddlewareResponse: UpdateResponse = {
-        sku: arg.sku,
+        sku: updateRequest.sku,
         success: updateInventoryRestClientResponse.data,
-        warehouseId: arg.warehouseId,
+        warehouseId: updateRequest.warehouseId,
+        quantity: updateRequest.quantity,
+        unlimitedQuantity: updateRequest.unlimitedQuantity,
+        dateUtcOnBalanceSystem: updateRequest.dateUtcOnBalanceSystem,
       }
 
       return inventoryMiddlewareResponse
     } catch (error) {
-      const { data } = error.response
+      const data = error.response ? error.response.data : ''
       const updateInventoryRestClientErrorResponse = {
-        sku: arg.sku,
+        sku: updateRequest.sku,
         success: 'false',
-        warehouseId: arg.warehouseId,
-        quantity: arg.quantity,
-        unlimitedQuantity: arg.unlimitedQuantity,
-        dateUtcOnBalanceSystem: arg.dateUtcOnBalanceSystem,
-        error: error.response.status,
+        warehouseId: updateRequest.warehouseId,
+        quantity: updateRequest.quantity,
+        unlimitedQuantity: updateRequest.unlimitedQuantity,
+        dateUtcOnBalanceSystem: updateRequest.dateUtcOnBalanceSystem,
+        error: error.response ? error.response.status : TOO_MANY_REQUETS,
         errorMessage: data.error ? data.error.message : data,
       }
 
-      if (error.response.status === 429) {
-        // eslint-disable-next-line no-console
-        console.log('header', error.response.headers['x-ratelimit-reset'])
-        // eslint-disable-next-line no-console
-        console.log('headers', error.response.headers)
-        updateInventoryRestClientErrorResponse.errorMessage =
-          error.response.headers['x-ratelimit-reset']
+      if (error.response && error.response.status === TOO_MANY_REQUETS) {
+        updateInventoryRestClientErrorResponse.errorMessage = error.response
+          ? error.response.headers['x-ratelimit-reset']
+          : ''
       }
 
       return updateInventoryRestClientErrorResponse
@@ -117,9 +105,9 @@ export async function inventoryMiddleware(
   async function operationRetry(
     updateResponseList: UpdateResponse[]
   ): Promise<any> {
-    const response = await findStoppedRequests(updateResponseList)
-
     addResponsesSuccessfulUpdates(updateResponseList)
+
+    const response = await findStoppedRequests(updateResponseList)
 
     return response
   }
@@ -131,51 +119,45 @@ export async function inventoryMiddleware(
     const retryList: UpdateRequest[] = []
     let value = '0'
 
-    for (const index in responseList) {
-      const response = responseList[index]
+    if (responseList.length >= 1) {
+      for (const index in responseList) {
+        const response = responseList[index]
 
-      if (response.error && response.error === 429) {
-        // eslint-disable-next-line @typescript-eslint/no-use-before-define
+        if (response.error && response.error === TOO_MANY_REQUETS) {
+          if (response.errorMessage && response.errorMessage > value) {
+            value = response.errorMessage
+          }
 
-        // eslint-disable-next-line no-console
-        console.log('error message:', response.errorMessage)
-        if (response.errorMessage && response.errorMessage > value) {
-          value = response.errorMessage
+          if (value === '0') {
+            value = RETRY_TIME_TO_CALL_BACK
+          }
+
+          retryList.push({
+            sku: response.sku,
+            warehouseId: response.warehouseId,
+            quantity: response.quantity,
+            unlimitedQuantity: response.unlimitedQuantity,
+            dateUtcOnBalanceSystem: response.dateUtcOnBalanceSystem,
+          })
         }
-
-        // eslint-disable-next-line no-console
-        console.log('errorMessage', value)
-
-        retryList.push({
-          sku: response.sku,
-          warehouseId: response.warehouseId,
-          quantity: response.quantity,
-          unlimitedQuantity: response.unlimitedQuantity,
-          dateUtcOnBalanceSystem: response.dateUtcOnBalanceSystem,
-        })
       }
     }
 
     if (retryList.length >= 1) {
-      // eslint-disable-next-line no-console
-      console.log(
-        `reintento activado en espera por ${parseFloat(value) * 1000} segundos`
+      let retryOperation: UpdateResponse[] = []
+
+      const awaitTimeout = (delay: string) =>
+        new Promise((resolve) => setTimeout(resolve, parseFloat(delay) * 1000))
+
+      await awaitTimeout(value)
+
+      retryOperation = await Promise.all(
+        retryList.map(async (item) => {
+          return updateInventory(item)
+        })
       )
 
-      setTimeout(async () => {
-        const retryOperation = await operationRetry(
-          await Promise.all(
-            retryList.map(async (arg) => {
-              return updateInventory(arg)
-            })
-          )
-        )
-
-        // eslint-disable-next-line no-console
-        console.log('respuesta de reintento', retryOperation)
-
-        return retryOperation
-      }, parseFloat(value) * 1000)
+      return operationRetry(retryOperation)
     }
 
     return true
@@ -187,7 +169,7 @@ export async function inventoryMiddleware(
     for (const index in updateResponseList) {
       const updateResponse = updateResponseList[index]
 
-      if (updateResponse.error !== 429) {
+      if (updateResponse.error !== TOO_MANY_REQUETS) {
         responseList.push(updateResponse)
       }
     }

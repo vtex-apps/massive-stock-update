@@ -42,13 +42,24 @@ Massive inventory stock update service through SKU and warehouseId
 
 ```json
 {
-   "message":[
+   "successfulResponses":
       {
-         "sku":1,
-         "success":true,
-         "warehouseId":123
+         "elements": [  {
+                "sku": 1,
+                "success": true,
+                "warehouseId": 123,
+                "quantity": 50,
+                "unlimitedQuantity": false,
+                "dateUtcOnBalanceSystem": null
+            }],
+         "quantity": 1,
       }
-   ]
+   ,
+   "failedResponses": {
+        "elements": [],
+        "quantity": 0
+    },
+    "total": 1
 }
 ```
 
@@ -56,15 +67,21 @@ Massive inventory stock update service through SKU and warehouseId
 
 ```json
 {
-    "message": [
-        {
-            "sku": "3",
-            "success": "false",
-            "warehouseId": 1236,
-            "error": 400,
-            "errorMessage": "Warehouse 1236 does not exist!"
-        }
-    ]
+    "failedResponses": {
+        "elements": [
+            [
+                {
+                    "sku": 159076,
+                    "quantity": 12,
+                    "dateUtcOnBalanceSystem": null,
+                    "success": "false",
+                    "error": 400,
+                    "errorMessage": "The request is invalid: The 'warehouseId' field is required."
+                }
+            ]
+        ],
+        "quantity": 1
+    }
 }
 ```
 
