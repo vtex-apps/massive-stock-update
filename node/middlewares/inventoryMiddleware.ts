@@ -27,7 +27,7 @@ export async function inventoryMiddleware(
         return e.success === 'false'
       })
 
-      ctx.status = OK
+      ctx.status = 200
       ctx.body = {
         successfulResponses: {
           elements: successfulResponses,
@@ -43,7 +43,7 @@ export async function inventoryMiddleware(
       await next()
     }
   } catch (error) {
-    ctx.status = INTERNAL_SERVER_ERROR
+    ctx.status = 500
     ctx.body = error
     await next()
   }
@@ -88,13 +88,18 @@ export async function inventoryMiddleware(
         quantity: updateRequest.quantity,
         unlimitedQuantity: updateRequest.unlimitedQuantity,
         dateUtcOnBalanceSystem: updateRequest.dateUtcOnBalanceSystem,
-        error: error.response ? error.response.status : TOO_MANY_REQUETS,
+        error: error.response ? error.response.status : 429,
         errorMessage: data.error ? data.error.message : data,
       }
 
-      if (error.response && error.response.status === TOO_MANY_REQUETS) {
+      if (error.response && error.response.status === 429) {
+        // eslint-disable-next-line no-console
+        console.log(
+          'ratelimit reset segundos:',
+          error.response.headers['ratelimit-reset']
+        )
         updateInventoryRestClientErrorResponse.errorMessage = error.response
-          ? error.response.headers['x-ratelimit-reset']
+          ? error.response.headers['ratelimit-reset']
           : ''
       }
 
@@ -123,13 +128,13 @@ export async function inventoryMiddleware(
       for (const index in responseList) {
         const response = responseList[index]
 
-        if (response.error && response.error === TOO_MANY_REQUETS) {
+        if (response.error && response.error === 429) {
           if (response.errorMessage && response.errorMessage > value) {
             value = response.errorMessage
           }
 
           if (value === '0') {
-            value = RETRY_TIME_TO_CALL_BACK
+            value = '20'
           }
 
           retryList.push({
@@ -169,7 +174,7 @@ export async function inventoryMiddleware(
     for (const index in updateResponseList) {
       const updateResponse = updateResponseList[index]
 
-      if (updateResponse.error !== TOO_MANY_REQUETS) {
+      if (updateResponse.error !== 429) {
         responseList.push(updateResponse)
       }
     }

@@ -57,13 +57,6 @@ declare global {
     unlimitedQuantity?: boolean
     dateUtcOnBalanceSystem?: string
   }
-
-  const RETRY_TIME_TO_CALL_BACK = '20'
-
-  const BAD_REQUEST = 400
-  const TOO_MANY_REQUETS = 429
-  const INTERNAL_SERVER_ERROR = 500
-  const OK = 200
 }
 
 // Export a service that defines route handlers and client options.

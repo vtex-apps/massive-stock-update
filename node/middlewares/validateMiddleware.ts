@@ -51,7 +51,7 @@ export async function validateMiddleware(
         unlimitedQuantity,
         dateUtcOnBalanceSystem,
         success: 'false',
-        error: BAD_REQUEST,
+        error: 400,
         errorMessage: `The request is invalid: The '${field}' field is required.`,
       }
     }
@@ -66,7 +66,7 @@ export async function validateMiddleware(
   }
 
   if (errorList.length >= 1) {
-    ctx.status = BAD_REQUEST
+    ctx.status = 400
     ctx.body = {
       failedResponses: {
         elements: errorList,
