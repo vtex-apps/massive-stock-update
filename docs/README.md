@@ -87,7 +87,7 @@ Massive inventory stock update service through SKU and warehouseId
 
 ## Flow
 
-![Massive stock update flow](https://user-images.githubusercontent.com/33711188/131016404-cbeaf737-bc90-4faa-b0be-2b89bef6756d.png)
+![Massive stock update flow](https://user-images.githubusercontent.com/33711188/132750831-38272a4d-5abb-446b-ac1b-574969cb8561.png)
 
 
 ## Contributors ✨
