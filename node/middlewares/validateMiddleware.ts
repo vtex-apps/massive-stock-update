@@ -45,9 +45,14 @@ export async function validateMiddleware(
 
     function errorResponseGenerator(field: string): UpdateResponse {
       return {
+        sku,
+        warehouseId,
+        quantity,
+        unlimitedQuantity,
+        dateUtcOnBalanceSystem,
         success: 'false',
         error: 400,
-        errorMessage: `The request is invalid:  The '${field}' field is required.`,
+        errorMessage: `The request is invalid: The '${field}' field is required.`,
       }
     }
   }
@@ -62,8 +67,11 @@ export async function validateMiddleware(
 
   if (errorList.length >= 1) {
     ctx.status = 400
-    ctx.response.body = {
-      errorList,
+    ctx.body = {
+      failedResponses: {
+        elements: errorList,
+        quantity: errorList.length,
+      },
     }
 
     return

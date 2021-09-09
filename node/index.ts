@@ -5,7 +5,7 @@ import { Clients } from './clients'
 import { inventoryMiddleware } from './middlewares/inventoryMiddleware'
 import { validateMiddleware } from './middlewares/validateMiddleware'
 
-const TIMEOUT_MS = 800
+const TIMEOUT_MS = 120000
 
 // Create a LRU memory cache for the Status client.
 // The @vtex/api HttpClient respects Cache-Control headers and uses the provided cache.
@@ -20,7 +20,7 @@ const clients: ClientsConfig<Clients> = {
   options: {
     // All IO Clients will be initialized with these options, unless otherwise specified.
     default: {
-      retries: 2,
+      // retries: 2,
       timeout: TIMEOUT_MS,
     },
     // This key will be merged with the default options and add this cache to our Status client.
@@ -36,23 +36,26 @@ declare global {
 
   // The shape of our State object found in `ctx.state`. This is used as state bag to communicate between middlewares.
   interface State extends RecorderState {
-    validatedBody: [UpdateRequest]
+    validatedBody: UpdateRequest[]
   }
 
   interface UpdateRequest {
     sku: number
-    warehouseId: number | string
-    quantity: number
-    unlimitedQuantity: boolean
-    dateUtcOnBalanceSystem: string
+    warehouseId?: number | string
+    quantity?: number
+    unlimitedQuantity?: boolean
+    dateUtcOnBalanceSystem?: string
   }
 
   interface UpdateResponse {
-    sku?: number
+    sku: number
     warehouseId?: number | string
     success: string
     error?: number | string
     errorMessage?: string
+    quantity?: number
+    unlimitedQuantity?: boolean
+    dateUtcOnBalanceSystem?: string
   }
 }
 
