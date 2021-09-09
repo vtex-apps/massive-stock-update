@@ -1,9 +1,9 @@
 {
-  "memory": 512,
+  "memory": 256,
   "ttl": 10,
-  "timeout": 4,
-  "minReplicas": 2,
-  "maxReplicas": 4,
+  "timeout": 120,
+  "minReplicas": 10,
+  "maxReplicas": 20,
   "workers": 1,
   "routes": {
     "status": {

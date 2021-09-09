@@ -1,11 +1,11 @@
-import { ExternalClient } from '@vtex/api'
-import type { InstanceOptions, IOContext } from '@vtex/api'
+import { JanusClient } from '@vtex/api'
+import type { InstanceOptions, IOContext, IOResponse } from '@vtex/api'
 
 import type { UpdateinventoryBySkuAndWarehouseRequest } from '../middlewares/inventoryMiddleware'
 
-export default class InventoryRestClient extends ExternalClient {
+export default class InventoryRestClient extends JanusClient {
   constructor(context: IOContext, options?: InstanceOptions) {
-    super(`http://${context.account}.vtexcommercestable.com.br`, context, {
+    super(context, {
       ...options,
       headers: {
         VtexIdClientAutCookie:
@@ -19,20 +19,13 @@ export default class InventoryRestClient extends ExternalClient {
     })
   }
 
-  /**
-   * Updates inventory by searching through SKU and warehouse.
-   * @param body
-   * @param skuId
-   * @param warehouseId
-   * @returns
-   */
   public async updateInventory(
     body: UpdateinventoryBySkuAndWarehouseRequest,
-    skuId: number,
-    warehouseId: number | string
-  ): Promise<string> {
-    return this.http.put(
-      `/api/logistics/pvt/inventory/skus/${skuId}/warehouses/${warehouseId}`,
+    skuId?: number | string,
+    warehouseId?: number | string
+  ): Promise<IOResponse<string>> {
+    return this.http.putRaw(
+      `http://${this.context.account}.vtexcommercestable.com.br/api/logistics/pvt/inventory/skus/${skuId}/warehouses/${warehouseId}`,
       body
     )
   }

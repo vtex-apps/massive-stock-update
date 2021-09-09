@@ -42,13 +42,24 @@ Massive inventory stock update service through SKU and warehouseId
 
 ```json
 {
-   "message":[
+   "successfulResponses":
       {
-         "sku":1,
-         "success":true,
-         "warehouseId":123
+         "elements": [  {
+                "sku": 1,
+                "success": true,
+                "warehouseId": 123,
+                "quantity": 50,
+                "unlimitedQuantity": false,
+                "dateUtcOnBalanceSystem": null
+            }],
+         "quantity": 1,
       }
-   ]
+   ,
+   "failedResponses": {
+        "elements": [],
+        "quantity": 0
+    },
+    "total": 1
 }
 ```
 
@@ -56,21 +67,27 @@ Massive inventory stock update service through SKU and warehouseId
 
 ```json
 {
-    "message": [
-        {
-            "sku": "3",
-            "success": "false",
-            "warehouseId": 1236,
-            "error": 400,
-            "errorMessage": "Warehouse 1236 does not exist!"
-        }
-    ]
+    "failedResponses": {
+        "elements": [
+            [
+                {
+                    "sku": 159076,
+                    "quantity": 12,
+                    "dateUtcOnBalanceSystem": null,
+                    "success": "false",
+                    "error": 400,
+                    "errorMessage": "The request is invalid: The 'warehouseId' field is required."
+                }
+            ]
+        ],
+        "quantity": 1
+    }
 }
 ```
 
 ## Flow
 
-![Massive stock update flow](https://user-images.githubusercontent.com/33711188/131016404-cbeaf737-bc90-4faa-b0be-2b89bef6756d.png)
+![Massive stock update flow](https://user-images.githubusercontent.com/33711188/132750831-38272a4d-5abb-446b-ac1b-574969cb8561.png)
 
 
 ## Contributors ✨
