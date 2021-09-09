@@ -66,8 +66,11 @@ export async function inventoryMiddleware(
     }
 
     try {
-      const updateInventoryRestClientResponse =
-        await inventoryRestClient.updateInventory(body, sku, warehouseId)
+      const updateInventoryRestClientResponse = await inventoryRestClient.updateInventory(
+        body,
+        sku,
+        warehouseId
+      )
 
       const inventoryMiddlewareResponse: UpdateResponse = {
         sku: updateRequest.sku,
