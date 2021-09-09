@@ -93,11 +93,6 @@ export async function inventoryMiddleware(
       }
 
       if (error.response && error.response.status === 429) {
-        // eslint-disable-next-line no-console
-        console.log(
-          'ratelimit reset segundos:',
-          error.response.headers['ratelimit-reset']
-        )
         updateInventoryRestClientErrorResponse.errorMessage = error.response
           ? error.response.headers['ratelimit-reset']
           : ''
