@@ -91,7 +91,7 @@ export async function inventoryMiddleware(
         quantity: updateRequest.quantity,
         unlimitedQuantity: updateRequest.unlimitedQuantity,
         dateUtcOnBalanceSystem: updateRequest.dateUtcOnBalanceSystem,
-        error: error.response ? error.response.status : 429,
+        error: error.response ? error.response.status : 500,
         errorMessage: data.error ? data.error.message : data,
       }
 

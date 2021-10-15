@@ -5,7 +5,7 @@ import { Clients } from './clients'
 import { inventoryMiddleware } from './middlewares/inventoryMiddleware'
 import { validateMiddleware } from './middlewares/validateMiddleware'
 
-const TIMEOUT_MS = 120000
+const TIMEOUT_MS = 600000
 
 // Create a LRU memory cache for the Status client.
 // The @vtex/api HttpClient respects Cache-Control headers and uses the provided cache.

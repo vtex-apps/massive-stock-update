@@ -9,10 +9,7 @@ export default class InventoryRestClient extends JanusClient {
       ...options,
       headers: {
         VtexIdClientAutCookie:
-          context.storeUserAuthToken ??
-          context.adminUserAuthToken ??
-          context.authToken ??
-          '',
+          context.adminUserAuthToken ?? context.authToken ?? '',
         'Content-Type': 'application/json; charset=utf-8',
         Accept: 'application/json',
       },

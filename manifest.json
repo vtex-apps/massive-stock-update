@@ -16,9 +16,7 @@
       "url": "https://support.vtex.com/hc/requests"
     },
     "type": "free",
-    "availableCountries": [
-      "*"
-    ]
+    "availableCountries": ["*"]
   },
   "scripts": {
     "prereleasy": "bash lint.sh"
@@ -28,35 +26,12 @@
     {
       "name": "outbound-access",
       "attrs": {
-        "host": "portal.vtexcommercebeta.com.br",
-        "path": "/api/logistics/pvt/*"
-      }
-    },
-    {
-      "name": "outbound-access",
-      "attrs": {
         "host": "portal.vtexcommercestable.com.br",
-        "path": "/api/logistics/pvt/*"
+        "path": "api/logistics/pvt/inventory/skus/*"
       }
     },
     {
       "name": "LogisticsAdmin"
-    },
-    {
-      "name": "outbound-access",
-      "attrs": {
-        "host": "portal.vtexcommercestable.com.br",
-        "path": "/api/*"
-      }
-    },
-    {
-      "name": "OMSViewer"
-    },
-    {
-      "name": "POWER_USER_DS"
-    },
-    {
-      "name": "AdminPortal"
     },
     {
       "name": "colossus-fire-event"
