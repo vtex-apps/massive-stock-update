@@ -8,7 +8,7 @@
   "routes": {
     "status": {
       "path": "/_v/massive/stock/update",
-      "public": false
+      "public": true
     }
   }
 }

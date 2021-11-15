@@ -5,6 +5,16 @@ export async function validateMiddleware(
   ctx: Context,
   next: () => Promise<any>
 ) {
+  const vtexIdToken =
+    ctx.cookies.get('VtexIdclientAutCookie') ?? ctx.get('VtexIdclientAutCookie')
+
+  if (!vtexIdToken) {
+    ctx.status = 401
+    ctx.body = 'VtexIdclientAutCookie not found.'
+
+    return
+  }
+
   const requestList = await json(ctx.req)
   const errorList: any[] = []
 

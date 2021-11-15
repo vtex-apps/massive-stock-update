@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Changed
+
+- Update README.md
+- Change endpoint to public
+- Update manifest.json
+- Add validation by VtexIdclientAutCookie
+
+## [2.0.8] - 2021-10-19
+
+### Changed
+
+- Update README.md
+
 ## [2.0.7] - 2021-10-15
 
 ### Fixed
