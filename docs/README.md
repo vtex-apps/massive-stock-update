@@ -1,16 +1,18 @@
 # MASSIVE STOCK UPDATE
 
-Massive inventory stock update service through SKU and warehouseId
+This application exposes an endpoint of massive stock update
+
+---
 
 ```shell
-PUT https://app.io.vtex.com/vtexarg.massive-stock-update/v2/{{accountName}}/{{workspace}}/_v/massive/stock/update
+PUT https://{{workspace}}--{{accountName}}.myvtex.com/_v/massive/stock/update
 
 ```
 
 ## Curl
 
 ```shell
-curl --location --request PUT 'https://app.io.vtex.com/vtexarg.massive-stock-update/v2/{{accountName}}/{{workspace}}/_v/massive/stock/update' \
+curl --location --request PUT 'https://{{workspace}}--{{accountName}}.myvtex.com/_v/massive/stock/update' \
 --header 'VtexIdClientAutCookie: "" \
 --header 'Content-Type: application/json' \
 --data-raw '[
@@ -105,6 +107,8 @@ curl --location --request PUT 'https://app.io.vtex.com/vtexarg.massive-stock-upd
 }
 ```
 
+---
+
 ## Credentials
 
 ### Create appKey y appToken
@@ -113,13 +117,16 @@ To generate app keys in your account, you should follow the instructions seen in
 
 ### Create role
 
-[Create a role](https://help.vtex.com/en/tracks/accounts-and-permissions--5PxyAgZrtiYlaYZBTlhJ2A/6Ymo5bNMyEYBGsTmbTC3H9?&utm_source=autocomplete) with the Logistics product and associate the resource 'Logistics access'. Finally add the appKey as a user.
+[Create a role](https://help.vtex.com/en/tutorial/perfiles-de-acceso--7HKK5Uau2H6wxE1rH5oRbc) with the following resources and add your user to that role
+
+- Logistics / Logistics access / Logistics full access
 
 ### Convert to JWT
 
 Make a call with the credentials created. The result, if the credentials are valid, will return a token that will be used as the value in the header 'VtexIdclientAutCookie' requested by the massive-stock-update component.
 
 ```shell
+>>>>>>> 91953ff0fc5154ad45335f9f2a8dbc6141fadf81
 curl --location --request POST 'http://vtexid.vtexcommercestable.com.br/api/vtexid/apptoken/login' \
 --header 'Content-Type: application/json' \
 --data-raw '{

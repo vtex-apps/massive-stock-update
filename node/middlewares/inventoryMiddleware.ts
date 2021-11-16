@@ -66,7 +66,10 @@ export async function inventoryMiddleware(
     }
 
     try {
+      const vtexIdToken = ctx.get('VtexIdclientAutCookie') ?? ''
+
       const updateInventoryRestClientResponse = await inventoryRestClient.updateInventory(
+        vtexIdToken,
         body,
         sku,
         warehouseId
@@ -98,7 +101,7 @@ export async function inventoryMiddleware(
       if (error.response && error.response.status === 429) {
         updateInventoryRestClientErrorResponse.errorMessage = error.response
           ? error.response.headers['ratelimit-reset']
-          : ''
+          : '0'
       }
 
       return updateInventoryRestClientErrorResponse
