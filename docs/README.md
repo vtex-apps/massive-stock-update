@@ -1,16 +1,18 @@
 # MASSIVE STOCK UPDATE
 
-Massive inventory stock update service through SKU and warehouseId
+This application exposes an endpoint of massive stock update
+
+---
 
 ```shell
-PUT https://{{workspace}}/{{accountName}}/_v/massive/stock/update
+PUT https://{{workspace}}--{{accountName}}.myvtex.com/_v/massive/stock/update
 
 ```
 
 ## Curl
 
 ```shell
-curl --location --request PUT 'https://{{workspace}}/{{accountName}}/_v/massive/stock/update' \
+curl --location --request PUT 'https://{{workspace}}--{{accountName}}.myvtex.com/_v/massive/stock/update' \
 --header 'VtexIdClientAutCookie: "" \
 --header 'Content-Type: application/json' \
 --data-raw '[
@@ -105,11 +107,19 @@ curl --location --request PUT 'https://{{workspace}}/{{accountName}}/_v/massive/
 }
 ```
 
+---
+
 ## Credentials
 
 ### Create appKey y appToken
 
 To generate app keys in your account, you should follow the instructions seen in the [Application Keys](https://help.vtex.com/en/tutorial/application-keys--2iffYzlvvz4BDMr6WGUtet) article in our Help Center.
+
+### Create role
+
+[Create a role](https://help.vtex.com/en/tutorial/perfiles-de-acceso--7HKK5Uau2H6wxE1rH5oRbc) with the following resources and add your user to that role
+
+- Logistics / Logistics access / Logistics full access
 
 ### Convert to JWT
 
