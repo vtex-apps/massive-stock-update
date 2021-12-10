@@ -111,6 +111,17 @@ curl --location --request PUT 'https://{{workspace}}--{{accountName}}.myvtex.com
 
 ## Credentials
 
+### What Header to use?
+
+You can use the following headers:
+
+- X-VTEX-API-AppKey
+- X-VTEX-API-AppToken
+
+Or
+
+- VtexIdClientAutCookie
+
 ### Create appKey y appToken
 
 To generate app keys in your account, you should follow the instructions seen in the [Application Keys](https://help.vtex.com/en/tutorial/application-keys--2iffYzlvvz4BDMr6WGUtet) article in our Help Center.
@@ -127,13 +138,21 @@ Make a call with the credentials created. The result, if the credentials are val
 
 ```shell
 >>>>>>> 91953ff0fc5154ad45335f9f2a8dbc6141fadf81
-curl --location --request POST 'http://vtexid.vtexcommercestable.com.br/api/vtexid/apptoken/login' \
+curl --location --request POST 'https://vtexid.vtexcommercestable.com.br/api/vtexid/apptoken/login' \
 --header 'Content-Type: application/json' \
 --data-raw '{
     "appkey": "...",
     "apptoken": "..."
 }'
 ```
+
+## Testing with bash script
+
+In the tests directory you can find the following sample scripts to compare performance between component execution versus parallel calls to the Logistic API.
+
+- api-logistic-inventory-test.sh
+- massive-stock-update-test.sh
+- update-parallel-api-logistic.sh
 
 ## Flow
 
@@ -149,7 +168,10 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 <table>
   <tr>
     <td align="center"><a href="https://github.com/GuidoSdo"><img src="https://avatars.githubusercontent.com/u/33711188?v=4" width="100px;" alt=""/><br /><sub><b>Guido Salcedo</b></sub></a><br /><a href="https://github.com/vtex-apps/massive-stock-update" title="Code">💻</a></td>
+
+   <td align="center"><a href="https://github.com/lucasdellasala"><img src="https://avatars.githubusercontent.com/u/55720621?v=4" width="100px;" alt=""/><br /><sub><b>Lucas Della Sala</b></sub></a><br /><a href="https://github.com/vtex-apps/massive-stock-update" title="Code">💻</a></td>
   </tr>
+  
 </table>
 
 <!-- markdownlint-enable -->

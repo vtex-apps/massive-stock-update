@@ -8,7 +8,6 @@ export default class InventoryRestClient extends JanusClient {
     super(context, {
       ...options,
       headers: {
-        VtexIdclientAutCookie: context.authToken,
         'Content-Type': 'application/json; charset=utf-8',
         Accept: 'application/json',
         'X-Vtex-Use-Https': 'true',
@@ -21,16 +20,26 @@ export default class InventoryRestClient extends JanusClient {
     authToken: string,
     body: UpdateinventoryBySkuAndWarehouseRequest,
     skuId?: number | string,
-    warehouseId?: number | string
+    warehouseId?: number | string,
+    appKey?: string,
+    appToken?: string
   ): Promise<IOResponse<string>> {
-    return this.http.putRaw(
-      `http://${this.context.account}.vtexcommercestable.com.br/api/logistics/pvt/inventory/skus/${skuId}/warehouses/${warehouseId}`,
-      body,
-      {
-        headers: {
-          VtexIdclientAutCookie: authToken,
-        },
-      }
-    )
+    const headers =
+      authToken !== ''
+        ? {
+            headers: {
+              VtexIdclientAutCookie: authToken,
+            },
+          }
+        : {
+            headers: {
+              'X-VTEX-API-AppKey': appKey,
+              'X-VTEX-API-AppToken': appToken,
+            },
+          }
+
+    const url = `http://${this.context.account}.vtexcommercestable.com.br/api/logistics/pvt/inventory/skus/${skuId}/warehouses/${warehouseId}`
+
+    return this.http.putRaw(url, body, headers)
   }
 }

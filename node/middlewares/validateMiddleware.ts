@@ -5,14 +5,21 @@ export async function validateMiddleware(
   ctx: Context,
   next: () => Promise<any>
 ) {
-  const vtexIdToken =
-    ctx.cookies.get('VtexIdclientAutCookie') ?? ctx.get('VtexIdclientAutCookie')
+  const vtexIdToken = ctx.get('VtexIdclientAutCookie')
+  const appKey = ctx.get('X-VTEX-API-AppKey')
+  const appToken = ctx.get('X-VTEX-API-AppToken')
 
-  if (!vtexIdToken) {
-    ctx.status = 401
-    ctx.body = 'VtexIdclientAutCookie not found.'
+  if (!(vtexIdToken !== '') && !(vtexIdToken.length > 1)) {
+    if (
+      !(appKey !== '' && !(appKey.length > 1)) &&
+      !(appToken !== '') &&
+      !(appToken.length > 1)
+    ) {
+      ctx.status = 401
+      ctx.body = 'Unauthorized access.'
 
-    return
+      return
+    }
   }
 
   const requestList = await json(ctx.req)
