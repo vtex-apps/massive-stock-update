@@ -12,6 +12,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Changed
 
 - Update README.md
+- Add auth options
+- Add script test
+
+### Changed
+
+- Update README.md
 - Change endpoint to public
 - Update manifest.json
 - Add validation by VtexIdclientAutCookie

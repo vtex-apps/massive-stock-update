@@ -67,12 +67,16 @@ export async function inventoryMiddleware(
 
     try {
       const vtexIdToken = ctx.get('VtexIdclientAutCookie') ?? ''
+      const appKey = ctx.get('X-VTEX-API-AppKey') ?? ''
+      const appToken = ctx.get('X-VTEX-API-AppToken') ?? ''
 
       const updateInventoryRestClientResponse = await inventoryRestClient.updateInventory(
         vtexIdToken,
         body,
         sku,
-        warehouseId
+        warehouseId,
+        appKey,
+        appToken
       )
 
       const inventoryMiddlewareResponse: UpdateResponse = {
