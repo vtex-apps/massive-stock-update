@@ -103,7 +103,7 @@ export const retryCall = async (
         : responseManager.updateResponse.push(element.item)
     )
 
-    return retry(responseManager)
+    return retry(ctx, responseManager)
   }
 
   logger.log(

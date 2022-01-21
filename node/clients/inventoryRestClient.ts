@@ -1,7 +1,7 @@
 import { JanusClient } from '@vtex/api'
 import type { InstanceOptions, IOContext, IOResponse } from '@vtex/api'
 
-import type { UpdateinventoryBySkuAndWarehouseRequest } from '../middlewares/inventoryMiddleware'
+// import type { UpdateinventoryBySkuAndWarehouseRequest } from '../middlewares/inventoryMiddleware'
 
 export default class InventoryRestClient extends JanusClient {
   constructor(context: IOContext, options?: InstanceOptions) {
@@ -18,7 +18,7 @@ export default class InventoryRestClient extends JanusClient {
   // eslint-disable-next-line max-params
   public async updateInventory(
     authToken: string,
-    body: UpdateinventoryBySkuAndWarehouseRequest,
+    body: any,
     skuId: number,
     warehouseId: string,
     appKey?: string,

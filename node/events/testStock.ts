@@ -85,10 +85,25 @@ export async function testStock(ctx: EventContext<Clients>) {
     )
     const data = await myOperations(ctx, responseManager)
 
+    logger.log(
+      {
+        message: 'testEvent function testStock 3',
+        request: data,
+      },
+      LogLevel.Info
+    )
+
     if (data) {
       buildResponse(data, ctx)
     }
   } catch (error) {
+    logger.log(
+      {
+        message: 'testEvent function testStock 4',
+        request: error,
+      },
+      LogLevel.Info
+    )
     buildServiceErrorResponse(error, ctx)
   }
 }

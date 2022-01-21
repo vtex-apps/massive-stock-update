@@ -2,7 +2,7 @@ import type { EventContext } from '@vtex/api'
 import { LogLevel } from '@vtex/api'
 
 import type { Clients } from '../../clients'
-import type { UpdateinventoryBySkuAndWarehouseRequest } from '../../middlewares/inventoryMiddleware'
+// import type { UpdateinventoryBySkuAndWarehouseRequest } from '../../middlewares/inventoryMiddleware'
 
 export const operation = async (
   ctx: EventContext<Clients>,
@@ -22,7 +22,7 @@ export const operation = async (
       clients: { inventoryRestClient },
     } = ctx
 
-    const updateinventoryBySkuAndWarehouseRequest: UpdateinventoryBySkuAndWarehouseRequest = {
+    const updateinventoryBySkuAndWarehouseRequest: any = {
       quantity,
       dateUtcOnBalanceSystem,
       unlimitedQuantity,
