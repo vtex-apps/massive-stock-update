@@ -24,7 +24,7 @@ export async function manager(ctx: Context, next: () => Promise<any>) {
     const appKey = ctx.get('X-VTEX-API-AppKey')
     const appToken = ctx.get('X-VTEX-API-AppToken')
 
-    ctx.clients.events.sendEvent('', 'send-event', {
+    await ctx.clients.events.sendEvent('', 'send-event', {
       validatedBody,
       vtexIdToken,
       appKey,
@@ -36,6 +36,17 @@ export async function manager(ctx: Context, next: () => Promise<any>) {
     ctx.body = 'Process executed OK'
     await next()
   } catch (error) {
+    const vtexIdToken = ctx.get('VtexIdclientAutCookie')
+    const appKey = ctx.get('X-VTEX-API-AppKey')
+    const appToken = ctx.get('X-VTEX-API-AppToken')
+
+    await ctx.clients.events.sendEvent('', 'send-event', {
+      validatedBody,
+      vtexIdToken,
+      appKey,
+      appToken,
+      manager: responseManager,
+    })
     logger.log(
       {
         message: 'massive-stock-update Manager Error',
