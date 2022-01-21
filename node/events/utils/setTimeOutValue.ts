@@ -12,9 +12,9 @@ export const setTimeOutValue = async (
   value =
     timeOutDefault !== undefined &&
     /^\d+$/.test(timeOutDefault) &&
-    timeOutDefault > '10'
+    timeOutDefault > '30'
       ? timeOutDefault
-      : '10'
+      : '30'
 
   return value
 }

@@ -27,14 +27,15 @@ export const operation = async (
       unlimitedQuantity,
     }
 
-    const updateInventoryRestClientResponse = await inventoryRestClient.updateInventory(
-      vtexIdToken,
-      updateinventoryBySkuAndWarehouseRequest,
-      sku,
-      warehouseId,
-      appKey,
-      appToken
-    )
+    const updateInventoryRestClientResponse =
+      await inventoryRestClient.updateInventory(
+        vtexIdToken,
+        updateinventoryBySkuAndWarehouseRequest,
+        sku,
+        warehouseId,
+        appKey,
+        appToken
+      )
 
     const operationResponse = {
       item: {
@@ -56,10 +57,7 @@ export const operation = async (
 
     logger.log(
       {
-        message: 'massive-stock-update - operation Error en Cliente',
-        errorMessage: {
-          error,
-        },
+        message: 'operation catch 1',
       },
       LogLevel.Info
     )
