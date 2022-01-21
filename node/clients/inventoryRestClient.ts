@@ -1,7 +1,6 @@
 import { JanusClient } from '@vtex/api'
 import type { InstanceOptions, IOContext, IOResponse } from '@vtex/api'
 
-// import type { UpdateinventoryBySkuAndWarehouseRequest } from '../middlewares/inventoryMiddleware'
 
 export default class InventoryRestClient extends JanusClient {
   constructor(context: IOContext, options?: InstanceOptions) {

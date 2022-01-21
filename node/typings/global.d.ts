@@ -26,3 +26,9 @@ interface OperationResponse {
   item: UpdateResponse
   type: string
 }
+
+interface UpdateinventoryBySkuAndWarehouseRequest {
+  unlimitedQuantity?: boolean
+  dateUtcOnBalanceSystem?: string
+  quantity?: number
+}
