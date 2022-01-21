@@ -1,10 +1,16 @@
 {
-  "memory": 256,
-  "ttl": 10,
-  "timeout": 600,
+  "memory": 2048,
+  "ttl": 20,
+  "timeout": 86400,
   "minReplicas": 10,
   "maxReplicas": 20,
   "workers": 1,
+  "events": {
+    "testEvent": {
+      "sender": "vtexarg.massive-stock-update",
+      "keys": ["send-event"]
+    }
+  },
   "routes": {
     "status": {
       "path": "/_v/massive/stock/update",

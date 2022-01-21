@@ -1,8 +1,6 @@
 import { JanusClient } from '@vtex/api'
 import type { InstanceOptions, IOContext, IOResponse } from '@vtex/api'
 
-import type { UpdateinventoryBySkuAndWarehouseRequest } from '../middlewares/inventoryMiddleware'
-
 export default class InventoryRestClient extends JanusClient {
   constructor(context: IOContext, options?: InstanceOptions) {
     super(context, {
@@ -19,8 +17,8 @@ export default class InventoryRestClient extends JanusClient {
   public async updateInventory(
     authToken: string,
     body: UpdateinventoryBySkuAndWarehouseRequest,
-    skuId?: number | string,
-    warehouseId?: number | string,
+    skuId: number,
+    warehouseId: string,
     appKey?: string,
     appToken?: string
   ): Promise<IOResponse<string>> {
