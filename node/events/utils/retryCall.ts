@@ -18,7 +18,10 @@ export const retryCall = async (
     appToken: string,
     vtexIdToken: string
   ) => Promise<OperationResponse>,
-  retry: (ctx: any, responseManager: ResponseManager) => Promise<ResponseManager | void>,
+  retry: (
+    ctx: any,
+    responseManager: ResponseManager
+  ) => Promise<ResponseManager | void>,
   responseManager: ResponseManager
   // eslint-disable-next-line max-params
 ): Promise<ResponseManager | void> => {
@@ -28,7 +31,7 @@ export const retryCall = async (
 
   logger.log(
     {
-      message: 'massive-stock-update - retryCall entrada ',
+      message: 'retryCall 1',
       responseManager: {
         errors429: responseManager.errors429.length,
         updateResponses: responseManager.updateResponse.length,
@@ -108,7 +111,7 @@ export const retryCall = async (
 
   logger.log(
     {
-      message: 'massive-stock-update - retryCall salida',
+      message: 'retryCall 2',
       responseManager: {
         errors429: responseManager.errors429.length,
         updateResponses: responseManager.updateResponse.length,

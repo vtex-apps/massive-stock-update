@@ -20,15 +20,14 @@ export const buildResponse = (
     return e.success === 'false'
   })
 
-  const failedResponseData = JSON.stringify(failedResponses)
+  // const failedResponseData = JSON.stringify(failedResponses)
 
   logger.log(
     {
-      message: 'massive-stock-update finish - buildResponse 2',
+      message: 'buildResponse 1',
       total: updateResponse.length,
       successfulResponses: successfulResponses.length,
       failedResponse: failedResponses.length,
-      failedResponseData,
     },
     LogLevel.Info
   )
@@ -52,7 +51,7 @@ export const buildErrorResponse = (
  */
   logger.log(
     {
-      message: 'massive-stock-update finish - buildErrorResponse 2',
+      message: 'buildErrorResponse 1',
       total: updateResponse.length,
       successfulResponses: 0,
       failedResponse: updateResponse.length,
@@ -73,7 +72,7 @@ export const buildServiceErrorResponse = (
 
   logger.log(
     {
-      message: 'massive-stock-update finish - buildServiceErrorResponse 2',
+      message: 'buildServiceErrorResponse 1',
       errorMessage: {
         error,
       },

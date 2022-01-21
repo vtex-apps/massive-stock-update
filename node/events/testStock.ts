@@ -28,7 +28,7 @@ export async function testStock(ctx: EventContext<Clients>) {
 
   logger.log(
     {
-      message: 'testEvent function testStock',
+      message: 'testEvent function testStock 1',
       request: validatedBody.length,
     },
     LogLevel.Info
@@ -39,7 +39,7 @@ export async function testStock(ctx: EventContext<Clients>) {
   try {
     logger.log(
       {
-        message: 'testEvent function testStock2',
+        message: 'testEvent function testStock 2',
         request: validatedBody.length,
       },
       LogLevel.Info
@@ -88,7 +88,6 @@ export async function testStock(ctx: EventContext<Clients>) {
     logger.log(
       {
         message: 'testEvent function testStock 3',
-        request: data,
       },
       LogLevel.Info
     )
