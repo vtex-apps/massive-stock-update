@@ -9,28 +9,37 @@ import {
   retryCall,
 } from './utils'
 
+async function myOperations(
+  ctx: any,
+  elements: ResponseManager
+): Promise<ResponseManager | void> {
+  try {
+    return await retryCall(ctx, operation, myOperations, elements)
+  } catch (error) {
+    buildServiceErrorResponse(error, ctx)
+  }
+}
+
 export async function testStock(ctx: EventContext<Clients>) {
   const {
     body: { vtexIdToken, appKey, appToken, manager, validatedBody },
     vtex: { logger },
   } = ctx
 
-  const responseManager = manager
+  logger.log(
+    {
+      message: 'testEvent function testStock',
+      request: validatedBody.length,
+    },
+    LogLevel.Info
+  )
 
-  async function myOperations(
-    elements: ResponseManager
-  ): Promise<ResponseManager | void> {
-    try {
-      return await retryCall(ctx, operation, myOperations, elements)
-    } catch (error) {
-      buildServiceErrorResponse(error, ctx)
-    }
-  }
+  const responseManager = manager
 
   try {
     logger.log(
       {
-        message: 'massive-stock-update start 2',
+        message: 'testEvent function testStock2',
         request: validatedBody.length,
       },
       LogLevel.Info
@@ -74,7 +83,7 @@ export async function testStock(ctx: EventContext<Clients>) {
         ? responseManager.errors429.push(element.item)
         : responseManager.updateResponse.push(element.item)
     )
-    const data = await myOperations(responseManager)
+    const data = await myOperations(ctx, responseManager)
 
     if (data) {
       buildResponse(data, ctx)

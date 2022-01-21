@@ -18,7 +18,7 @@ export const retryCall = async (
     appToken: string,
     vtexIdToken: string
   ) => Promise<OperationResponse>,
-  retry: (responseManager: ResponseManager) => Promise<ResponseManager | void>,
+  retry: (ctx: any, responseManager: ResponseManager) => Promise<ResponseManager | void>,
   responseManager: ResponseManager
   // eslint-disable-next-line max-params
 ): Promise<ResponseManager | void> => {

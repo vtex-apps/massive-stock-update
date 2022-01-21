@@ -11,7 +11,7 @@ export async function validateMiddleware(
 
   logger.log(
     {
-      message: 'massive-stock-update validateMiddleware start 2',
+      message: 'validateMiddleware',
     },
     LogLevel.Info
   )
@@ -25,7 +25,7 @@ export async function validateMiddleware(
     ctx.body = 'Unauthorized access.'
     logger.log(
       {
-        message: 'massive-stock-update Error',
+        message: 'Error',
         errorMessage: 'Unauthorized access',
       },
       LogLevel.Error

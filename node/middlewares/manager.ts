@@ -14,7 +14,7 @@ export async function manager(ctx: Context, next: () => Promise<any>) {
   try {
     logger.log(
       {
-        message: 'massive-stock-update start manager',
+        message: 'manager',
         request: validatedBody.length,
       },
       LogLevel.Info
