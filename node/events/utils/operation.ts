@@ -2,7 +2,6 @@ import type { EventContext } from '@vtex/api'
 import { LogLevel } from '@vtex/api'
 
 import type { Clients } from '../../clients'
-import type { UpdateinventoryBySkuAndWarehouseRequest } from '../../middlewares/inventoryMiddleware'
 
 export const operation = async (
   ctx: EventContext<Clients>,
