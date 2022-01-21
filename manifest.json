@@ -1,7 +1,7 @@
 {
   "name": "massive-stock-update",
   "vendor": "vtexarg",
-  "version": "3.1.1",
+  "version": "3.1.8",
   "title": "Massive stock update",
   "description": "Massive inventory stock update",
   "mustUpdateAt": "2018-01-04",
@@ -45,5 +45,16 @@
       "name": "colossus-write-logs"
     }
   ],
+  "settingsSchema": {
+    "title": "Massive Stock update",
+    "type": "object",
+    "properties": {
+      "timeOutDefault": {
+        "title": "Retry Timeout",
+        "type": "string",
+        "description": "Mass retry timeout configuration. Default value set to 10 seconds. The value 10 is the minimum."
+      }
+    }
+  },
   "$schema": "https://raw.githubusercontent.com/vtex/node-vtex-api/master/gen/manifest.schema"
 }

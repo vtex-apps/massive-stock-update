@@ -19,8 +19,8 @@ export default class InventoryRestClient extends JanusClient {
   public async updateInventory(
     authToken: string,
     body: UpdateinventoryBySkuAndWarehouseRequest,
-    skuId?: number | string,
-    warehouseId?: number | string,
+    skuId: number,
+    warehouseId: string,
     appKey?: string,
     appToken?: string
   ): Promise<IOResponse<string>> {
