@@ -72,33 +72,37 @@ export const retryCall = async (
 
     responseManager.errors429 = []
 
-    const itemsResponses: OperationResponse[] = await Promise.all(
-      retryList.map(async (item) => {
-        const {
-          sku,
-          warehouseId,
-          quantity,
-          unlimitedQuantity,
-          dateUtcOnBalanceSystem,
-        } = item
+    const itemsResponses: OperationResponse[] = []
 
-        const {
-          body: { vtexIdToken, appKey, appToken },
-        } = ctx
+    for (let i = 0; i < retryList.length; i++) {
+      const {
+        sku,
+        warehouseId,
+        quantity,
+        unlimitedQuantity,
+        dateUtcOnBalanceSystem,
+      } = retryList[i]
 
-        return operation(
-          ctx,
-          sku,
-          warehouseId,
-          quantity,
-          unlimitedQuantity,
-          dateUtcOnBalanceSystem,
-          appKey,
-          appToken,
-          vtexIdToken
-        )
-      })
-    )
+      const {
+        body: { vtexIdToken, appKey, appToken },
+      } = ctx
+
+      // eslint-disable-next-line no-await-in-loop
+      const response = await operation(
+        ctx,
+        sku,
+        warehouseId,
+        quantity,
+        unlimitedQuantity,
+        dateUtcOnBalanceSystem,
+        appKey,
+        appToken,
+        vtexIdToken
+      )
+
+      itemsResponses.push(response)
+      sleep('0.1')
+    }
 
     itemsResponses.map((element) =>
       element.type === '429'

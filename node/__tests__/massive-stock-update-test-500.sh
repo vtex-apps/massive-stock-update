@@ -5,7 +5,7 @@ echo "Script Name: $0"
 
 initialTime=$(date +%s)
 
-response="$(curl --location --request PUT 'https://tmehdi2--gsalcedo.myvtex.com/_v/massive/stock/update' \
+response="$(curl --location --request PUT 'https://tmehdi3--gsalcedo.myvtex.com/_v/massive/stock/update' \
   --header 'X-VTEX-API-AppKey: vtexappkey-gsalcedo-BVEWVN' \
   --header 'X-VTEX-API-AppToken: KARRQNTRQBMOMPBNVGZAJMTKINQWEMQWQHGHCEPDIRQHTVIGTTXOEKPYHHJCWWNEKPYFIULQRWSSVLQMFKDKOCSFSIAUUMGLDMXDWDXZIGXIRWCVQWXMTCPHXSNAUQVE' \
   --header 'Content-Type: application/json' \

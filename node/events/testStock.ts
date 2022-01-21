@@ -7,6 +7,7 @@ import {
   buildServiceErrorResponse,
   operation,
   retryCall,
+  sleep,
 } from './utils'
 
 async function myOperations(
@@ -44,39 +45,34 @@ export async function testStock(ctx: EventContext<Clients>) {
       },
       LogLevel.Info
     )
-    const itemsResponses: OperationResponse[] = await Promise.all(
-      validatedBody.map(
-        async (elem: {
-          sku: number
-          warehouseId: string
-          quantity: number
-          unlimitedQuantity: boolean
-          dateUtcOnBalanceSystem: string
-        }) => {
-          const {
-            sku,
-            warehouseId,
-            quantity,
-            unlimitedQuantity,
-            dateUtcOnBalanceSystem,
-          } = elem
 
-          const response = await operation(
-            ctx,
-            sku,
-            warehouseId,
-            quantity,
-            unlimitedQuantity,
-            dateUtcOnBalanceSystem,
-            appKey,
-            appToken,
-            vtexIdToken
-          )
+    const itemsResponses: OperationResponse[] = []
 
-          return response
-        }
+    for (let i = 0; i < validatedBody.length; i++) {
+      const {
+        sku,
+        warehouseId,
+        quantity,
+        unlimitedQuantity,
+        dateUtcOnBalanceSystem,
+      } = validatedBody[i]
+
+      // eslint-disable-next-line no-await-in-loop
+      const response = await operation(
+        ctx,
+        sku,
+        warehouseId,
+        quantity,
+        unlimitedQuantity,
+        dateUtcOnBalanceSystem,
+        appKey,
+        appToken,
+        vtexIdToken
       )
-    )
+
+      itemsResponses.push(response)
+      sleep('0.1')
+    }
 
     itemsResponses.map((element) =>
       element.type === '429'
