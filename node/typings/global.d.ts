@@ -32,3 +32,14 @@ interface UpdateinventoryBySkuAndWarehouseRequest {
   dateUtcOnBalanceSystem?: string
   quantity?: number
 }
+
+interface IncomingFile {
+  filename: string
+  mimeType: string
+  encoding: string
+}
+
+interface UpdateProcess {
+  list: UpdateRequest[]
+  requestId: string
+}

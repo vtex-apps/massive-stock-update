@@ -5,7 +5,8 @@
     "lib": ["dom"],
     "module": "esnext",
     "moduleResolution": "node",
-    "target": "es2019"
+    "target": "es2019",
+    "allowSyntheticDefaultImports": true
   },
   "include": ["./typings/*.d.ts", "./**/*.tsx", "./**/*.ts"]
 }

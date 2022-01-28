@@ -6,7 +6,9 @@
   "description": "Massive inventory stock update",
   "mustUpdateAt": "2018-01-04",
   "categories": [],
-  "dependencies": {},
+  "dependencies": {
+    "vtex.inventory-graphql": "0.x"
+  },
   "builders": {
     "node": "6.x",
     "docs": "0.x"
@@ -36,6 +38,13 @@
       }
     },
     {
+      "name": "outbound-access",
+      "attrs": {
+        "host": "vtexid.vtexcommercestable.com.br",
+        "path": "api/logistics/pvt/inventory/warehouseitems/import"
+      }
+    },
+    {
       "name": "LogisticsAdmin"
     },
     {
@@ -43,6 +52,9 @@
     },
     {
       "name": "colossus-write-logs"
+    },
+    {
+      "name": "vbase-read-write"
     }
   ],
   "settingsSchema": {

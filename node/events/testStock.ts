@@ -11,7 +11,7 @@ import {
 } from './utils'
 
 async function myOperations(
-  ctx: any,
+  ctx: EventContext<Clients>,
   elements: ResponseManager
 ): Promise<ResponseManager | void> {
   try {
@@ -23,8 +23,9 @@ async function myOperations(
 
 export async function testStock(ctx: EventContext<Clients>) {
   const {
-    body: { vtexIdToken, appKey, appToken, manager, validatedBody },
+    body: { vtexIdToken, appKey, appToken, manager, validatedBody, requestId },
     vtex: { logger },
+    clients: { vbase },
   } = ctx
 
   logger.log(
@@ -46,50 +47,110 @@ export async function testStock(ctx: EventContext<Clients>) {
       LogLevel.Info
     )
 
-    const itemsResponses: OperationResponse[] = []
+    try {
+      const responseVbase = await vbase.getJSON('massivestock', requestId)
 
-    for (let i = 0; i < validatedBody.length; i++) {
-      const {
-        sku,
-        warehouseId,
-        quantity,
-        unlimitedQuantity,
-        dateUtcOnBalanceSystem,
-      } = validatedBody[i]
-
-      // eslint-disable-next-line no-await-in-loop
-      const response = await operation(
-        ctx,
-        sku,
-        warehouseId,
-        quantity,
-        unlimitedQuantity,
-        dateUtcOnBalanceSystem,
-        appKey,
-        appToken,
-        vtexIdToken
+      logger.log(
+        {
+          message: 'testEvent function evento ya ejecutado',
+          requestId,
+          responseVbase,
+        },
+        LogLevel.Info
       )
+    } catch (error) {
+      if (error.response.status === 404) {
+        const updateProcess: UpdateProcess = {
+          list: validatedBody,
+          requestId,
+        }
 
-      itemsResponses.push(response)
-      sleep('0.1')
-    }
+        const newHash = Buffer.from(JSON.stringify(updateProcess)).toString(
+          'base64'
+        )
 
-    itemsResponses.map((element) =>
-      element.type === '429'
-        ? responseManager.errors429.push(element.item)
-        : responseManager.updateResponse.push(element.item)
-    )
-    const data = await myOperations(ctx, responseManager)
+        const vbaseData = await vbase.saveJSON(
+          'massivestock',
+          requestId,
+          newHash
+        )
 
-    logger.log(
-      {
-        message: 'testEvent function testStock 3',
-      },
-      LogLevel.Info
-    )
+        logger.log(
+          {
+            message: 'testEvent function saveJSON in vBase',
+            vbaseData,
+          },
+          LogLevel.Info
+        )
 
-    if (data) {
-      buildResponse(data, ctx)
+        const itemsResponses: OperationResponse[] = []
+
+        for (let i = 0; i < validatedBody.length; i++) {
+          const {
+            sku,
+            warehouseId,
+            quantity,
+            unlimitedQuantity,
+            dateUtcOnBalanceSystem,
+          } = validatedBody[i]
+
+          // eslint-disable-next-line no-await-in-loop
+          const response = await operation(
+            ctx,
+            sku,
+            warehouseId,
+            quantity,
+            unlimitedQuantity,
+            dateUtcOnBalanceSystem,
+            appKey,
+            appToken,
+            vtexIdToken
+          )
+
+          itemsResponses.push(response)
+          sleep('0.1')
+        }
+
+        itemsResponses.map((element) =>
+          element.type === '429'
+            ? responseManager.errors429.push(element.item)
+            : responseManager.updateResponse.push(element.item)
+        )
+        const data = await myOperations(ctx, responseManager)
+
+        logger.log(
+          {
+            message: 'testEvent function testStock 3',
+          },
+          LogLevel.Info
+        )
+
+        if (data) {
+          const updateprocessRemoved = await vbase.deleteFile(
+            'massivestock',
+            requestId
+          )
+
+          logger.log(
+            {
+              message: 'testEvent function deleteJSON in vBase',
+              updateprocessRemoved,
+            },
+            LogLevel.Info
+          )
+          buildResponse(data, requestId, ctx)
+        } else {
+          logger.log(
+            {
+              message: 'testEvent function no entro al buildResponse',
+              dataResponse: data,
+            },
+            LogLevel.Info
+          )
+        }
+      } else {
+        throw error
+      }
     }
   } catch (error) {
     logger.log(
@@ -97,7 +158,7 @@ export async function testStock(ctx: EventContext<Clients>) {
         message: 'testEvent function testStock 4',
         request: error,
       },
-      LogLevel.Info
+      LogLevel.Error
     )
     buildServiceErrorResponse(error, ctx)
   }

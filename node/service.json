@@ -9,11 +9,19 @@
     "testEvent": {
       "sender": "vtexarg.massive-stock-update",
       "keys": ["send-event"]
+    },
+    "csvEvent": {
+      "sender": "vtexarg.massive-stock-update",
+      "keys": ["csv-event"]
     }
   },
   "routes": {
     "status": {
       "path": "/_v/massive/stock/update",
+      "public": true
+    },
+    "csvUpdate": {
+      "path": "/_v/massive/stock/update/csv",
       "public": true
     }
   }

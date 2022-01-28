@@ -5,6 +5,7 @@ import type { Clients } from '../../clients'
 
 export const buildResponse = (
   responseManager: ResponseManager,
+  requestId: string,
   ctx: EventContext<Clients>
 ): void => {
   const { updateResponse } = responseManager
@@ -22,12 +23,20 @@ export const buildResponse = (
 
   // const failedResponseData = JSON.stringify(failedResponses)
 
+  console.info({
+    total: updateResponse.length,
+    successfulResponses: successfulResponses.length,
+    failedResponse: failedResponses.length,
+    requestId,
+  })
+
   logger.log(
     {
       message: 'buildResponse 1',
       total: updateResponse.length,
       successfulResponses: successfulResponses.length,
       failedResponse: failedResponses.length,
+      requestId,
     },
     LogLevel.Info
   )
@@ -56,7 +65,7 @@ export const buildErrorResponse = (
       successfulResponses: 0,
       failedResponse: updateResponse.length,
     },
-    LogLevel.Info
+    LogLevel.Error
   )
 }
 
@@ -77,7 +86,7 @@ export const buildServiceErrorResponse = (
         error,
       },
     },
-    LogLevel.Info
+    LogLevel.Error
   )
 }
 

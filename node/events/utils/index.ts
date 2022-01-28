@@ -13,3 +13,5 @@ export {
 } from './responseBuilder'
 
 export { operation } from './operation'
+
+export { jsonToCsv } from './jsonToCsv'

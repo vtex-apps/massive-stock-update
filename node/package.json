@@ -2,20 +2,32 @@
   "license": "MIT",
   "dependencies": {
     "co-body": "^6.0.0",
+    "export-to-csv": "^0.2.1",
+    "fetch-blob": "^2.1.2",
+    "form-data": "^4.0.0",
+    "graphql": "^14.5.8",
+    "json2csv": "^5.0.6",
+    "multer": "^1.4.4",
+    "objects-to-csv": "^1.3.6",
     "ramda": "^0.25.0",
-    "graphql": "^14.5.8"
+    "uuid": "^8.3.2"
   },
   "devDependencies": {
     "@types/co-body": "^0.0.3",
+    "@types/graphql": "^14.5.0",
     "@types/jest": "^24.0.18",
+    "@types/json2csv": "^5.0.3",
+    "@types/multer": "^1.4.7",
     "@types/node": "^12.0.0",
+    "@types/objects-to-csv": "^1.3.1",
     "@types/ramda": "types/npm-ramda#dist",
+    "@types/uuid": "^8.3.4",
     "@vtex/api": "6.45.6",
     "@vtex/test-tools": "^1.0.0",
     "@vtex/tsconfig": "^0.5.6",
     "typescript": "3.9.7",
-    "vtex.catalog-graphql": "http://vtex.vtexassets.com/_v/public/typings/v1/vtex.catalog-graphql@1.96.0/public/@types/vtex.catalog-graphql",
-    "@types/graphql": "^14.5.0"
+    "vtex.inventory-graphql": "http://vtex.vtexassets.com/_v/public/typings/v1/vtex.inventory-graphql@0.18.2/public/@types/vtex.inventory-graphql",
+    "vtexarg.massive-stock-update": "https://massivetest--gsalcedo.myvtex.com/_v/private/typings/linked/v1/vtexarg.massive-stock-update@3.1.11-beta.2+build1643032764/public/_types/react"
   },
   "scripts": {
     "lint": "tsc --noEmit --pretty"

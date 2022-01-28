@@ -2,8 +2,10 @@ import type { ClientsConfig, ServiceContext, RecorderState } from '@vtex/api'
 import { LRUCache, method, Service } from '@vtex/api'
 
 import { Clients } from './clients'
+import { createCSV } from './events/createCSV'
 import { testStock as myEvent } from './events/testStock'
 import { manager } from './middlewares/manager'
+import { managerCsv } from './middlewares/managerCsv'
 import { validateMiddleware } from './middlewares/validateMiddleware'
 
 const TIMEOUT_MS = 86400000
@@ -50,8 +52,13 @@ export default new Service({
     status: method({
       PUT: [validateMiddleware, manager],
     }),
+    csvUpdate: method({
+      PUT: [validateMiddleware, managerCsv],
+    }),
   },
+
   events: {
     testEvent: myEvent,
+    csvEvent: createCSV,
   },
 })
